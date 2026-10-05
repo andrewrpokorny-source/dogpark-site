@@ -3,7 +3,8 @@ import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
-import BoardCrop from '../components/BoardCrop.astro';
+import pawSpa from '../assets/paw-spa.webp';
+import dogHouse from '../assets/dog-house.webp';
 import InteractiveBoard from '../components/InteractiveBoard.astro';
 import board from '../assets/game-board.webp';
 import drBens from '../assets/dr-bens.webp';
@@ -138,7 +139,7 @@ const spaces = [
             <h2 class="mb-6 text-3xl font-bold">The Paw Spa</h2>
             <p>If sent to the PAW SPA, move your dog playing piece to the PAW SPA. You <strong>lose 1 turn, but add 1 diamond</strong>. Take 1 diamond from the Dog Warden’s bone pile, and place it in your home space. When your 1st turn is up, move your dog to the space marked SPA EXIT. On your next turn, roll the die and move accordingly.</p>
           </div>
-          <BoardCrop x={0.79} y={0.2} zoom={4.2} label="The Paw Spa on the board" class="order-first aspect-square w-32 -rotate-3 rounded-2xl border-4 border-ink sm:order-none sm:w-full" />
+          <Image src={pawSpa} alt="The teal Paw Spa, with a terrier relaxing in a bubbly bath behind the window" width={360} class="order-first aspect-square w-32 -rotate-3 rounded-2xl border-4 border-ink object-cover sm:order-none sm:w-full" />
         </div>
       </section>
 
@@ -153,7 +154,7 @@ const spaces = [
             </ol>
             <p>Either way, move your dog playing piece to the DOG HOUSE. To exit the DOG HOUSE, you must <strong>roll a 2, 4, or 6</strong>. When you roll a 2, 4, or 6, move your dog to the DOG HOUSE EXIT space, and roll again. Proceed to move accordingly.</p>
           </div>
-          <BoardCrop x={0.21} y={0.21} zoom={4.2} label="The Dog House on the board" class="order-first aspect-square w-32 rotate-2 rounded-2xl border-4 border-ink sm:order-none sm:w-full" />
+          <Image src={dogHouse} alt="The pink Dog House, with a terrier sitting in the doorway" width={360} class="order-first aspect-square w-32 rotate-2 rounded-2xl border-4 border-ink object-cover sm:order-none sm:w-full" />
         </div>
       </section>
 

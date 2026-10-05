@@ -2,7 +2,8 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
-import BoardCrop from '../components/BoardCrop.astro';
+import pawSpa from '../assets/paw-spa.webp';
+import dogHouse from '../assets/dog-house.webp';
 import ToyFair from '../components/ToyFair.astro';
 import MeetThePups from '../components/MeetThePups.astro';
 import DogParkScene from '../components/DogParkScene.astro';
@@ -183,7 +184,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
         </div>
       </article>
       <article class="reveal card overflow-hidden" data-delay="2">
-        <BoardCrop x={0.79} y={0.2} zoom={4.2} label="The Paw Spa on the game board" class="aspect-square w-full bg-grass" />
+        <Image src={pawSpa} alt="The teal Paw Spa, with a terrier relaxing in a bubbly bath behind the window" width={600} class="aspect-square w-full object-cover" />
         <div class="p-6">
           <p class="eyebrow text-sage">Lose a turn · +1 diamond</p>
           <h3 class="mt-2 text-xl font-bold">The Paw Spa</h3>
@@ -191,7 +192,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
         </div>
       </article>
       <article class="reveal card overflow-hidden" data-delay="3">
-        <BoardCrop x={0.21} y={0.21} zoom={4.2} label="The pink Dog House on the game board" class="aspect-square w-full bg-grass" />
+        <Image src={dogHouse} alt="The pink Dog House, with a terrier sitting in the doorway" width={600} class="aspect-square w-full object-cover" />
         <div class="p-6">
           <p class="eyebrow text-coral">Roll 2, 4 or 6 to escape</p>
           <h3 class="mt-2 text-xl font-bold">The Dog House</h3>
