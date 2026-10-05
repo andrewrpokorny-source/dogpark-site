@@ -110,12 +110,27 @@ img.img-in { transition: opacity .6s ease, filter .7s ease, transform .7s ease; 
     box-shadow: var(--shadow-card);
   }
 
+  /* Brenda's watercolor lawn (from the DOG PARK sign painting) */
   .grass-bg {
-    background-color: var(--color-grass);
-    background-image: url("../assets/grass.webp");
-    background-size: auto 100%;
-    background-repeat: repeat-x;
+    background-color: #5b9a45;
+    background-image: url("../assets/lawn.webp");
+    background-size: cover;
+    background-position: center;
   }
+  /* A full-width section set on the lawn, with a soft cream wash so text stays readable */
+  .lawn {
+    position: relative;
+    background-color: #5b9a45;
+    background-image:
+      linear-gradient(var(--color-cream), rgb(251 247 233 / 0) 90px, rgb(251 247 233 / 0) calc(100% - 90px), var(--color-cream)),
+      linear-gradient(rgb(251 247 233 / 0.5), rgb(251 247 233 / 0.5)),
+      url("../assets/lawn.webp");
+    background-size: auto, auto, cover;
+    background-position: center;
+  }
+  .lawn .eyebrow:is(.text-lime-deep) { color: var(--color-grass-dark); }
+  .lawn :is(.text-ink-soft) { color: var(--color-ink); }
+  .lawn .card :is(.text-ink-soft), .lawn .bg-white :is(.text-ink-soft) { color: var(--color-ink-soft); }
 
   .field {
     @apply w-full rounded-2xl border-2 border-ink/15 bg-white px-4 py-3 text-base text-ink

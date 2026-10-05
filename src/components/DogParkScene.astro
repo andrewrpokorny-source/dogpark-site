@@ -1,0 +1,103 @@
+---
+// Brenda's watercolor terrier stands, wags, and sits down. As it sits, the lawn and the
+// DOG PARK sign wash in around it, ending on the grass with the sign.
+// Plays when scrolled into view; tap to replay.
+import { Image } from 'astro:assets';
+import scene from '../assets/park-scene/scene.webp';
+import first from '../assets/park-scene/terrier-first.webp';
+import last from '../assets/park-scene/terrier-last.webp';
+---
+<div data-fade-group class="park-scene relative overflow-hidden rounded-[2rem] border-4 border-ink bg-cream shadow-2xl" data-state="idle" data-park-scene>
+  <!-- aspect of the painting: 2524 × 1474 -->
+  <div class="relative aspect-[2524/1474]">
+    <Image src={scene} alt="" width={2400} class="scene-grass absolute inset-0 size-full object-cover" loading="lazy" />
+    <!-- terrier: a still first frame until the animation starts, then the animated cut-out -->
+    <div class="terrier absolute" aria-hidden="true">
+      <Image src={first} alt="" width={609} class="terrier-still absolute inset-0 size-full" loading="lazy" />
+      <Image src={last} alt="" width={609} class="terrier-end absolute inset-0 size-full opacity-0" loading="lazy" />
+      <img data-anim alt="" class="terrier-anim absolute inset-0 size-full opacity-0" width="609" height="471" />
+    </div>
+  </div>
+  <button type="button" data-replay class="replay absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full border-2 border-ink bg-cream px-4 py-2 font-display text-sm font-semibold opacity-0 shadow-[0_3px_0_var(--color-ink)] transition hover:-translate-y-0.5" aria-label="Replay the animation">
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+    Again!
+  </button>
+  <span class="sr-only">A watercolor Welsh Terrier stands, wags its tail, and sits down on the grass beside a wooden DOG PARK sign.</span>
+</div>
+
+<style>
+  @property --wash { syntax: '<percentage>'; inherits: false; initial-value: 0%; }
+
+  /* Terrier position within the painting (measured from the original scene) */
+  .terrier { left: 6.9%; top: 40.52%; width: 41.98%; height: 55.6%; }
+
+  /* The lawn washes in from where the dog sits */
+  .scene-grass {
+    -webkit-mask-image: radial-gradient(circle at 26.7% 95%, #000 calc(var(--wash) - 18%), transparent var(--wash));
+            mask-image: radial-gradient(circle at 26.7% 95%, #000 calc(var(--wash) - 18%), transparent var(--wash));
+    --wash: 0%;
+    transform: scale(1.04);
+  }
+  [data-state='playing'] .scene-grass { animation: wash 2.1s cubic-bezier(.35, .1, .25, 1) 2.15s forwards; }
+  [data-state='done'] .scene-grass { --wash: 170%; transform: none; }
+  @keyframes wash { to { --wash: 170%; transform: none; } }
+
+  .terrier-anim, .terrier-still, .terrier-end { transition: opacity .2s ease; }
+  [data-state='playing'] .terrier-anim { opacity: 1; }
+  [data-state='playing'] .terrier-still { opacity: 0; }
+  [data-state='done'] .terrier-anim { opacity: 1; }
+  [data-state='done'] .terrier-still { opacity: 0; }
+  [data-state='done'] .replay { opacity: 1; }
+
+  /* Reduced motion: just show the finished painting */
+  [data-state='still'] .scene-grass { --wash: 170%; transform: none; }
+  [data-state='still'] .terrier-still { opacity: 0; }
+  [data-state='still'] .terrier-end { opacity: 1; }
+</style>
+
+<script>
+  const SRC = '/anim/terrier-sits.webp';
+  const LENGTH = 4800; // ms, the animation plays once and holds its last frame
+
+  document.querySelectorAll<HTMLElement>('[data-park-scene]').forEach((root) => {
+    const anim = root.querySelector<HTMLImageElement>('[data-anim]')!;
+    const replay = root.querySelector<HTMLButtonElement>('[data-replay]')!;
+    let timer = 0;
+
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      root.dataset.state = 'still';
+      return;
+    }
+
+    // fetch once; each play gets a fresh blob URL so the animation restarts without re-downloading
+    let blob: Promise<Blob> | null = null;
+    const load = () => (blob ??= fetch(SRC).then((r) => r.blob()));
+    let url = '';
+
+    const play = async () => {
+      clearTimeout(timer);
+      const b = await load();
+      root.dataset.state = 'idle';
+      void root.offsetWidth; // restart the CSS wash
+      anim.onload = () => {
+        root.dataset.state = 'playing';
+        timer = window.setTimeout(() => (root.dataset.state = 'done'), LENGTH + 200);
+      };
+      if (url) URL.revokeObjectURL(url);
+      url = URL.createObjectURL(b);
+      anim.src = url;
+    };
+
+    // warm the cache before it scrolls into view
+    new IntersectionObserver((entries, io) => {
+      if (entries[0].isIntersecting) { load(); io.disconnect(); }
+    }, { rootMargin: '600px 0px' }).observe(root);
+
+    new IntersectionObserver((entries, io) => {
+      if (entries[0].isIntersecting) { play(); io.disconnect(); }
+    }, { threshold: 0.55 }).observe(root);
+
+    replay.addEventListener('click', play);
+    root.addEventListener('click', (e) => { if (root.dataset.state === 'done' && !(e.target as Element).closest('[data-replay]')) play(); });
+  });
+</script>

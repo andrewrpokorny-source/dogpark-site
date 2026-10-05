@@ -5,6 +5,7 @@ import Icon from '../components/Icon.astro';
 import BoardCrop from '../components/BoardCrop.astro';
 import ToyFair from '../components/ToyFair.astro';
 import MeetThePups from '../components/MeetThePups.astro';
+import DogParkScene from '../components/DogParkScene.astro';
 import board from '../assets/game-board.webp';
 import drBens from '../assets/dr-bens.webp';
 import parkSign from '../assets/dog-park-sign.webp';
@@ -96,6 +97,22 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
     </div>
   </section>
 
+  <!-- WELCOME + GOAL share one lawn -->
+  <div class="lawn">
+  <!-- WELCOME: the terrier sits down by the DOG PARK sign -->
+  <section class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 md:pt-28 lg:px-8" aria-labelledby="welcome-title">
+    <div class="reveal mb-8 flex flex-col justify-between gap-3 md:flex-row md:items-end">
+      <div>
+        <p class="eyebrow text-lime-deep">Come on in</p>
+        <h2 id="welcome-title" class="mt-3 text-4xl font-bold sm:text-5xl">Sit. Stay. Get lost.</h2>
+      </div>
+      <p class="max-w-sm text-ink-soft">Every great game starts at the gate. Grab a pup and head into the park.</p>
+    </div>
+    <div class="reveal" data-delay="1">
+      <DogParkScene />
+    </div>
+  </section>
+
   <!-- GOAL -->
   <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
     <div class="reveal mx-auto max-w-2xl text-center">
@@ -118,6 +135,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
       ))}
     </div>
   </section>
+  </div>
 
   <!-- HOW A TURN WORKS -->
   <div class="grass-edge" aria-hidden="true"></div>
@@ -181,7 +199,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
         </div>
       </article>
       <article class="reveal card overflow-hidden" data-delay="1">
-        <Image src={parkSign} alt="A terrier sitting on grass looking up at a wooden Dog Park sign" width={800} class="aspect-square w-full object-cover object-[68%_50%]" />
+        <Image src={parkSign} alt="A watercolor Welsh Terrier sitting on the grass beside a wooden DOG PARK sign" width={800} class="aspect-square w-full object-cover object-[40%_50%]" />
         <div class="p-6">
           <p class="eyebrow text-lime-deep">Trading post</p>
           <h3 class="mt-2 text-xl font-bold">The Dog Park</h3>
@@ -252,7 +270,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
 
   <!-- NOTIFY CTA -->
   <section class="px-4 pt-20 sm:px-6 md:pt-28 lg:px-8">
-    <div class="reveal grass-bg relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border-4 border-ink px-6 py-16 text-center sm:px-12 md:py-20" style="background-size: auto 140%;">
+    <div class="reveal grass-bg relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border-4 border-ink px-6 py-16 text-center sm:px-12 md:py-20">
       <div class="absolute inset-0 bg-grass-dark/45" aria-hidden="true"></div>
       <div class="relative">
         <p class="eyebrow text-lime">Pre-orders open mid-November</p>
