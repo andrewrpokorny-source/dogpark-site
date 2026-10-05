@@ -5,7 +5,7 @@ import Icon from '../components/Icon.astro';
 import board from '../assets/game-board.webp';
 import DoggyDoor from '../components/DoggyDoor.astro';
 import drBens from '../assets/dr-bens.webp';
-import tokens from '../assets/dog-tokens.webp';
+import group from '../assets/pups-group.webp';
 
 const facts = [
   { icon: 'heart', label: 'Mosaic artist' },
@@ -134,8 +134,8 @@ const facts = [
     <div class="reveal card overflow-hidden">
       <Image src={drBens} alt="Dr. Ben's dog clinic illustration" width={800} class="aspect-square w-full object-cover md:h-full" />
     </div>
-    <div class="reveal card overflow-hidden bg-[#3d3d3b]" data-delay="1">
-      <Image src={tokens} alt="Six colorful dog playing pieces" width={1400} class="h-full w-full object-contain" />
+    <div class="reveal card flex items-center overflow-hidden bg-white p-4" data-delay="1">
+      <Image src={group} alt="The six Dog Park playing pieces: a blue Bernedoodle, pink Dachshund, red German Shepherd, green Catahoula, orange Golden Retriever, and yellow Yorkshire Terrier" width={1300} class="w-full" />
     </div>
   </section>
 

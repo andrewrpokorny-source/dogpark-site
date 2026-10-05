@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import board from '../assets/game-board.webp';
-import tokens from '../assets/dog-tokens.webp';
+import group from '../assets/pups-group.webp';
 
 // Everything named in the rules on /how-to-play
 const contents = [
@@ -36,8 +36,8 @@ const contents = [
           </svg>
         </div>
 
-        <Image src={tokens} alt="The six colorful dog playing pieces" width={600}
-          class="absolute -bottom-6 -left-3 w-40 rotate-[-6deg] rounded-xl border-4 border-ink shadow-[0_5px_0_var(--color-ink)] sm:-left-8 sm:w-56" />
+        <Image src={group} alt="The six Dog Park playing pieces" width={600}
+          class="absolute -bottom-6 -left-3 w-40 rotate-[-6deg] rounded-xl border-4 border-ink bg-white shadow-[0_5px_0_var(--color-ink)] sm:-left-8 sm:w-56" />
       </div>
     </div>
 

@@ -33,7 +33,7 @@ const tokenRows = [
           <Image src={board} alt="The Dog Park game board" width={1400} class="block w-full select-none" draggable="false" loading="eager" />
           <span data-ring class="pointer-events-none absolute size-[6.5%] -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-white/90 shadow-[0_0_0_3px_rgb(29_34_24/0.5)] transition-[left,top] duration-200" style="left:50%;top:92%"></span>
           <div data-token class="token absolute z-10 size-[7%] -translate-x-1/2 -translate-y-[62%] transition-[left,top] ease-out" style="left:50%;top:92%">
-            <img data-token-img alt="Your dog token" class="size-full rounded-full border-[3px] border-[var(--pup,#7cc62a)] bg-[#60615a] object-cover shadow-[0_4px_0_var(--color-ink)]" />
+            <img data-token-img alt="Your dog token" class="size-full rounded-full border-[3px] border-[var(--pup,#78be20)] bg-white object-cover shadow-[0_4px_0_var(--color-ink)]" />
           </div>
           <div data-confetti class="pointer-events-none absolute inset-0 overflow-hidden"></div>
         </div>
@@ -96,7 +96,7 @@ const tokenRows = [
         <div class="mt-4 flex gap-2 overflow-x-auto pb-1" role="group" aria-label="Choose your pup">
           {pups.map((p, i) => (
             <button type="button" data-pup={p.id} data-img={pupThumbs[i]} data-hex={p.hex} data-name={pupName(p)} aria-label={pupName(p)} aria-pressed="false"
-              class="size-12 shrink-0 overflow-hidden rounded-full border-[3px] border-transparent bg-[#60615a] transition hover:scale-105 aria-pressed:border-ink aria-pressed:shadow-[0_0_0_3px_var(--color-lime)]">
+              class="size-12 shrink-0 overflow-hidden rounded-full border-[3px] border-transparent bg-white transition hover:scale-105 aria-pressed:border-ink aria-pressed:shadow-[0_0_0_3px_var(--color-lime)]">
               <img src={pupThumbs[i]} alt="" class="size-full object-cover" />
             </button>
           ))}
