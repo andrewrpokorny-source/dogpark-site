@@ -1,0 +1,107 @@
+---
+// Brenda's doggy-door watercolor, split into layers so the terrier can duck and pop back out.
+// At rest the layers line up exactly with the original painting.
+import { Image } from 'astro:assets';
+import base from '../assets/doggy-door/base.webp';
+import dog from '../assets/doggy-door/dog.webp';
+import flap from '../assets/doggy-door/flap.webp';
+
+interface Props {
+  class?: string;
+  width?: number;
+  eager?: boolean;
+}
+const { class: cls = '', width = 800, eager = false } = Astro.props;
+const loading = eager ? 'eager' : 'lazy';
+---
+<div data-fade-group class:list={['doggy-door relative overflow-hidden', cls]} role="img" aria-label="Watercolor of a terrier peeking out of a doggy door">
+  <Image src={base} alt="" width={width} class="block w-full" loading={loading} />
+  <div class="dog-window absolute inset-0">
+    <Image src={dog} alt="" width={width} class="dog absolute inset-0 w-full" loading={loading} />
+  </div>
+  <Image src={flap} alt="" width={width} class="flap absolute inset-0 w-full" loading={loading} />
+</div>
+
+<style>
+  /* Window opening in the painting (1024×1536 px): x 392–806, y 330–883 */
+  .dog-window {
+    clip-path: polygon(38.3% 21.5%, 78.7% 21.5%, 78.7% 57.5%, 38.3% 57.5%);
+  }
+  /* Scroll-driven: --p (0 → 1) is the painting's trip up the screen, set by the script below.
+     A paused 1s animation with a negative delay shows the frame at that point. */
+  .dog, .flap {
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-play-state: paused;
+    animation-delay: calc(var(--p, 0.5) * -1s);
+    will-change: transform;
+  }
+  .dog {
+    transform-origin: 60.5% 57.3%; /* the dog's neck, at the sill */
+    animation-name: dog-scroll;
+  }
+  .flap {
+    transform-origin: 33.2% 19.66%; /* hinge: top-left corner of the flap */
+    animation-name: flap-scroll;
+  }
+
+  /* 0 = just entering at the bottom of the screen, 1 = leaving off the top */
+  @keyframes dog-scroll {
+    0%, 16%   { transform: translateY(29%) rotate(0); animation-timing-function: ease-in-out; }   /* inside */
+    23%       { transform: translateY(24%) rotate(0); }                                          /* bumps the flap */
+    26%       { transform: translateY(29%) rotate(0); animation-timing-function: cubic-bezier(.2,.7,.2,1); }
+    36%       { transform: translateY(-2.5%) rotate(-2deg); }                                    /* pops out */
+    41%       { transform: translateY(0.8%) rotate(1deg); }
+    46%, 58%  { transform: translateY(0) rotate(0); animation-timing-function: ease-in-out; }   /* just like the painting */
+    64%       { transform: translateY(0) rotate(-5deg); }                                        /* curious head tilt */
+    70%       { transform: translateY(0) rotate(3deg); }
+    76%, 82%  { transform: translateY(0) rotate(0); animation-timing-function: ease-in; }
+    94%, 100% { transform: translateY(29%) rotate(0); }                                          /* ducks back in */
+  }
+
+  /* open = the painting; closed = flap mapped down over the opening */
+  @keyframes flap-scroll {
+    0%, 16%, 26% { transform: translate(3.906%, 1.302%) matrix(1.0432, -0.1275, 1.3375, 2.234, 0, 0); }
+    23%          { transform: translate(3.32%, 1.1%) matrix(1.037, -0.108, 1.137, 2.049, 0, 0); }
+    36%          { transform: translate(-0.4%, -0.15%) matrix(0.995, 0.012, -0.12, 0.9, 0, 0); }
+    41%, 82%     { transform: translate(0, 0) matrix(1, 0, 0, 1, 0, 0); }
+    94%, 100%    { transform: translate(3.906%, 1.302%) matrix(1.0432, -0.1275, 1.3375, 2.234, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dog, .flap { animation: none; }
+  }
+</style>
+
+<script>
+  // Feed each doggy door its scroll progress, eased a little so it glides.
+  const doors = [...document.querySelectorAll<HTMLElement>('.doggy-door')];
+  if (doors.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const state = doors.map(() => ({ p: -1, target: 0 }));
+    let raf = 0;
+    const measure = () => {
+      const vh = innerHeight;
+      doors.forEach((el, i) => {
+        const r = el.getBoundingClientRect();
+        state[i].target = Math.min(1, Math.max(0, (vh - r.top) / (vh + r.height)));
+        if (state[i].p < 0) state[i].p = state[i].target; // no glide on first paint
+      });
+    };
+    const tick = () => {
+      raf = 0;
+      let moving = false;
+      doors.forEach((el, i) => {
+        const s = state[i];
+        s.p += (s.target - s.p) * 0.18;
+        if (Math.abs(s.target - s.p) > 0.0005) moving = true; else s.p = s.target;
+        el.style.setProperty('--p', s.p.toFixed(4));
+      });
+      if (moving) raf = requestAnimationFrame(tick);
+    };
+    const onScroll = () => { measure(); if (!raf) raf = requestAnimationFrame(tick); };
+    onScroll();
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+  }
+</script>

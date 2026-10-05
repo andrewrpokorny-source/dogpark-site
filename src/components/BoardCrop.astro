@@ -1,0 +1,23 @@
+---
+// Zooms into one spot on the game board illustration.
+import { getImage } from 'astro:assets';
+import board from '../assets/game-board.webp';
+
+interface Props {
+  /** Point on the board to center on, as fractions 0..1 */
+  x: number;
+  y: number;
+  zoom?: number;
+  class?: string;
+  label: string;
+}
+const { x, y, zoom = 4, class: cls = '', label } = Astro.props;
+const img = await getImage({ src: board, width: 2000, format: 'webp' });
+const pos = (f: number) => `${(((f * zoom - 0.5) / (zoom - 1)) * 100).toFixed(1)}%`;
+---
+<div
+  role="img"
+  aria-label={label}
+  class={cls}
+  style={`background-image:url(${img.src});background-size:${zoom * 100}%;background-position:${pos(x)} ${pos(y)};`}
+></div>

@@ -1,0 +1,161 @@
+@import "tailwindcss";
+@import "@fontsource-variable/lexend";
+@import "@fontsource-variable/nunito-sans";
+@import "@fontsource/courier-prime/700.css";
+
+/* Palette sampled from Brenda's board art and logo */
+@theme {
+  --color-lime: #b4cb76;
+  --color-lime-soft: #e4edc6;
+  --color-lime-deep: #7f9f3c;
+  --color-ink: #1d2218;
+  --color-ink-soft: #4a5240;
+  --color-cream: #fbf7e9;
+  --color-path: #f4ecc4;
+  --color-grass: #4c8a2e;
+  --color-grass-dark: #2c5419;
+  --color-coral: #e7a391;
+  --color-mauve: #ba94ac;
+  --color-periwinkle: #899dbd;
+  --color-butter: #e5d29f;
+  --color-sage: #94b5ac;
+  --color-terrier: #c8853a;
+  --color-token-red: #e8432f;
+
+  --font-display: "Lexend Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Nunito Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-type: "Courier Prime", ui-monospace, monospace;
+
+  --shadow-card: 0 1px 0 rgb(29 34 24 / 0.06), 0 12px 32px -12px rgb(29 34 24 / 0.22);
+  --shadow-pop: 0 4px 0 var(--color-ink);
+}
+
+@layer base {
+  html {
+    overflow-x: clip;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    overflow-x: clip;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display tracking-tight;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 3px solid var(--color-token-red);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  ::selection { background: var(--color-lime); color: var(--color-ink); }
+  html { scrollbar-color: var(--color-lime-deep) var(--color-cream); }
+  ::-webkit-scrollbar { width: 12px; height: 12px; }
+  ::-webkit-scrollbar-track { background: var(--color-cream); }
+  ::-webkit-scrollbar-thumb { background: var(--color-lime); border: 3px solid var(--color-cream); border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--color-ink); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-lime-deep); }
+}
+
+/* Images fade and sharpen in as they load (class added by the layout script) */
+img.img-pending { opacity: 0; filter: blur(14px); transform: scale(1.03); }
+img.img-in { transition: opacity .6s ease, filter .7s ease, transform .7s ease; }
+
+/* Paw-print stamp left by button presses */
+.paw-stamp { position: fixed; z-index: 90; width: 34px; height: 34px; margin: -17px 0 0 -17px; pointer-events: none; color: var(--color-lime); stroke: var(--color-ink); stroke-width: 3.5; overflow: visible;
+  animation: paw-stamp .7s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes paw-stamp {
+  0%   { opacity: 0; transform: scale(.3) rotate(var(--r, -15deg)); }
+  25%  { opacity: .9; transform: scale(1.1) rotate(var(--r, -15deg)); }
+  100% { opacity: 0; transform: scale(1.35) translateY(-14px) rotate(var(--r, -15deg)); }
+}
+
+/* Lawn edge: her grass texture cut into a band of blades */
+.grass-edge {
+  position: relative; z-index: 5; height: 30px; margin-block: -15px;
+  background: var(--color-grass) url("../assets/grass.webp") repeat-x center / auto 100%;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 30' preserveAspectRatio='none'%3E%3Cpath d='M0 30V17l3.8 -14l3.2 14l3.1 -4l2.9 4l2.9 -10l5.1 10l1.8 -6l3.2 6l1.9 -15l3.1 15l2.0 -10l3.0 10l3.6 -4l3.4 4l3.0 -12l2.0 12l2.3 -6l3.7 6l2.7 -12l2.3 12l1.9 -8l3.1 8l3.0 -14l5.0 14l4.3 -4l3.7 4l2.8 -10l2.2 10l3.5 -10l2.5 10l2.6 -10l2.4 10l3.7 -10l4.3 10l2.9 -6l2.1 6l2.9 -14l2.1 14l3.1 -4l2.9 4V30Z'/%3E%3C/svg%3E") repeat-x 0 0 / 120px 100%;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 30' preserveAspectRatio='none'%3E%3Cpath d='M0 30V17l3.8 -14l3.2 14l3.1 -4l2.9 4l2.9 -10l5.1 10l1.8 -6l3.2 6l1.9 -15l3.1 15l2.0 -10l3.0 10l3.6 -4l3.4 4l3.0 -12l2.0 12l2.3 -6l3.7 6l2.7 -12l2.3 12l1.9 -8l3.1 8l3.0 -14l5.0 14l4.3 -4l3.7 4l2.8 -10l2.2 10l3.5 -10l2.5 10l2.6 -10l2.4 10l3.7 -10l4.3 10l2.9 -6l2.1 6l2.9 -14l2.1 14l3.1 -4l2.9 4V30Z'/%3E%3C/svg%3E") repeat-x 0 0 / 120px 100%;
+}
+
+/* Paw-print scroll trail */
+.paw-trail { position: fixed; right: 14px; top: 50%; z-index: 40; display: none; flex-direction: column; gap: 10px; transform: translateY(-50%); pointer-events: none; }
+@media (min-width: 1100px) and (min-height: 640px) { .paw-trail { display: flex; } }
+.paw-trail svg { width: 15px; height: 15px; color: var(--color-ink); opacity: .1; transition: opacity .35s ease, color .35s ease, transform .35s cubic-bezier(.2,.7,.2,1); }
+.paw-trail svg:nth-child(odd) { transform: translateX(-7px) rotate(-12deg); }
+.paw-trail svg:nth-child(even) { transform: translateX(5px) rotate(12deg); }
+.paw-trail svg.on { opacity: .85; color: var(--color-lime-deep); }
+.paw-trail svg.on:nth-child(odd) { transform: translateX(-7px) rotate(-12deg) scale(1.15); }
+.paw-trail svg.on:nth-child(even) { transform: translateX(5px) rotate(12deg) scale(1.15); }
+
+@layer components {
+  .eyebrow {
+    @apply font-type text-xs sm:text-sm uppercase tracking-[0.2em];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-display font-semibold text-base
+      border-2 border-ink transition-all duration-150 select-none cursor-pointer;
+    box-shadow: var(--shadow-pop);
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--color-ink); }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--color-ink); }
+  .btn-primary { @apply bg-lime text-ink; }
+  .btn-dark { @apply bg-ink text-cream; box-shadow: 0 4px 0 var(--color-lime-deep); }
+  .btn-dark:hover { box-shadow: 0 6px 0 var(--color-lime-deep); }
+  .btn-ghost { @apply bg-cream text-ink; }
+
+  .card {
+    @apply bg-white rounded-3xl border-2 border-ink/10;
+    box-shadow: var(--shadow-card);
+  }
+
+  .grass-bg {
+    background-color: var(--color-grass);
+    background-image: url("../assets/grass.webp");
+    background-size: auto 100%;
+    background-repeat: repeat-x;
+  }
+
+  .field {
+    @apply w-full rounded-2xl border-2 border-ink/15 bg-white px-4 py-3 text-base text-ink
+      placeholder:text-ink-soft/50 transition focus:border-lime-deep focus:outline-none focus:ring-4 focus:ring-lime/40;
+  }
+  .label { @apply mb-1.5 block font-display text-sm font-semibold; }
+
+  .prose-rules p { @apply mb-4 leading-relaxed text-ink-soft; }
+  .prose-rules strong { @apply text-ink; }
+  .prose-rules ol { @apply mb-4 list-decimal space-y-3 pl-6 text-ink-soft leading-relaxed; }
+}
+
+/* Scroll reveal (only hides content once JS has confirmed it will reveal it) */
+.js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1); }
+.js .reveal.in { opacity: 1; transform: none; }
+.reveal[data-delay="1"] { transition-delay: .1s; }
+.reveal[data-delay="2"] { transition-delay: .2s; }
+.reveal[data-delay="3"] { transition-delay: .3s; }
+
+@keyframes bob { 0%,100% { transform: translateY(0) rotate(var(--r,0deg)); } 50% { transform: translateY(-10px) rotate(var(--r,0deg)); } }
+.bob { animation: bob 5s ease-in-out infinite; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 60s linear infinite; }
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee { animation: marquee 40s linear infinite; }
+
+/* Page transitions (native cross-document view transitions; browsers without support just navigate normally) */
+@view-transition { navigation: auto; }
+#site-header { view-transition-name: site-header; }
+#announce { view-transition-name: announce; }
+::view-transition-old(root) { animation: page-out .22s cubic-bezier(.4,0,1,1) both; }
+::view-transition-new(root) { animation: page-in .38s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-10px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(16px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .bob, .spin-slow, .marquee { animation: none; }
+}

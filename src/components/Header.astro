@@ -1,0 +1,96 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-lime.webp';
+import Icon from './Icon.astro';
+
+const links = [
+  { href: '/how-to-play', label: 'How to Play' },
+  { href: '/play', label: 'Play' },
+  { href: '/products-store', label: 'Store' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header id="site-header" class="sticky top-0 z-50 transition-all duration-300">
+  <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+    <a href="/" class="shrink-0 transition-transform hover:-rotate-1 hover:scale-[1.02]" aria-label="Dog Park home">
+      <Image src={logo} alt="Dog Park: A Get Lost! Game" width={360} class="h-11 w-auto rounded-lg sm:h-12" loading="eager" />
+    </a>
+
+    <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+      {links.map((l) => (
+        <a
+          href={l.href}
+          class:list={[
+            'rounded-full px-4 py-2 font-display text-[15px] font-medium transition-colors',
+            path === l.href ? 'bg-ink text-cream' : 'text-ink hover:bg-lime-soft',
+          ]}
+        >{l.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <a href="/notify-me" class="btn btn-primary hidden !px-5 !py-2 text-sm sm:inline-flex">Notify me</a>
+      <a href="/cart" class="relative grid size-11 place-items-center rounded-full border-2 border-ink/10 bg-white transition hover:border-ink" aria-label="Cart">
+        <Icon name="cart" class="size-5" />
+        <span data-cart-count class="absolute -right-1 -top-1 hidden min-w-5 rounded-full bg-token-red px-1.5 text-center font-display text-[11px] font-bold leading-5 text-white">0</span>
+      </a>
+      <button id="menu-open" class="grid size-11 place-items-center rounded-full bg-ink text-cream lg:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <Icon name="menu" class="size-5" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobile-menu" class="pointer-events-none fixed inset-0 z-[60] lg:hidden" aria-hidden="true">
+  <div data-scrim class="absolute inset-0 bg-ink/40 opacity-0 backdrop-blur-sm transition-opacity duration-300"></div>
+  <div data-panel class="grass-bg absolute inset-y-0 right-0 flex w-[min(88vw,380px)] translate-x-full flex-col p-6 text-cream shadow-2xl transition-transform duration-300 ease-out">
+    <div class="absolute inset-0 bg-grass-dark/70"></div>
+    <div class="relative flex items-center justify-between">
+      <span class="eyebrow text-lime">Menu</span>
+      <button id="menu-close" class="grid size-11 place-items-center rounded-full bg-cream text-ink" aria-label="Close menu">
+        <Icon name="close" class="size-5" />
+      </button>
+    </div>
+    <nav class="relative mt-10 flex flex-col gap-1" aria-label="Mobile">
+      {[{ href: '/', label: 'Home' }, ...links, { href: '/cart', label: 'Cart' }].map((l, i) => (
+        <a href={l.href} class="group flex items-center justify-between border-b border-cream/15 py-4 font-display text-3xl font-semibold" style={`--i:${i}`}>
+          <span class:list={[path === l.href && 'text-lime']}>{l.label}</span>
+          <Icon name="paw" class="size-6 -rotate-12 text-lime opacity-0 transition group-hover:opacity-100" />
+        </a>
+      ))}
+    </nav>
+    <a href="/notify-me" class="btn btn-primary relative mt-auto w-full">Get notified at launch</a>
+  </div>
+</div>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const onScroll = () => {
+    const scrolled = window.scrollY > 8;
+    header.classList.toggle('bg-cream/85', scrolled);
+    header.classList.toggle('backdrop-blur-md', scrolled);
+    header.classList.toggle('shadow-[0_1px_0_rgb(29_34_24/0.08)]', scrolled);
+  };
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const menu = document.getElementById('mobile-menu')!;
+  const panel = menu.querySelector<HTMLElement>('[data-panel]')!;
+  const scrim = menu.querySelector<HTMLElement>('[data-scrim]')!;
+  const openBtn = document.getElementById('menu-open')!;
+  const setOpen = (open: boolean) => {
+    menu.classList.toggle('pointer-events-none', !open);
+    menu.setAttribute('aria-hidden', String(!open));
+    openBtn.setAttribute('aria-expanded', String(open));
+    panel.classList.toggle('translate-x-full', !open);
+    scrim.classList.toggle('opacity-0', !open);
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+  };
+  openBtn.addEventListener('click', () => setOpen(true));
+  document.getElementById('menu-close')!.addEventListener('click', () => setOpen(false));
+  scrim.addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && setOpen(false));
+</script>

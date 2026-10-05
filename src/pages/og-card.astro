@@ -1,0 +1,43 @@
+---
+// Source for the 1200x630 link-preview image (public/og.png).
+// Regenerate by screenshotting this page at 1200x630 after design changes.
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import board from '../assets/game-board.webp';
+import logo from '../assets/logo-lime.webp';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>OG card</title>
+    <style>
+      body { margin: 0; width: 1200px; height: 630px; overflow: hidden; }
+    </style>
+  </head>
+  <body class="!bg-cream">
+    <div class="relative flex h-[630px] w-[1200px] items-center overflow-hidden">
+      <div class="absolute -right-24 -top-40 size-[700px] rounded-full bg-lime/50 blur-3xl"></div>
+      <div class="absolute -bottom-40 -left-20 size-[420px] rounded-full bg-butter/60 blur-3xl"></div>
+
+      <div class="relative z-10 w-[600px] pl-20">
+        <Image src={logo} alt="" width={700} class="h-[84px] w-auto rounded-xl" />
+        <h1 class="mt-10 text-[76px] font-extrabold leading-[0.95] text-ink">
+          Get lost in the dog park.
+        </h1>
+        <p class="mt-7 text-[26px] leading-snug text-ink-soft">
+          A family-friendly labyrinth board game. Collect bones, diamonds &amp; hearts, and dodge the dog house!
+        </p>
+        <p class="eyebrow mt-8 inline-flex items-center gap-3 rounded-full border-[3px] border-ink bg-white px-5 py-2 !text-[17px]">
+          <span class="size-3 rounded-full bg-token-red"></span> Pre-orders mid-November
+        </p>
+      </div>
+
+      <div class="absolute -right-10 top-1/2 w-[600px] -translate-y-1/2">
+        <div class="absolute inset-6 rotate-[5deg] rounded-[2.5rem] bg-ink"></div>
+        <Image src={board} alt="" width={1200} class="relative w-full rotate-[-3deg] rounded-[2.5rem] border-[6px] border-ink" loading="eager" />
+      </div>
+    </div>
+  </body>
+</html>

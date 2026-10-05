@@ -1,0 +1,84 @@
+---
+import Icon from './Icon.astro';
+import { toyFair } from '../data/events';
+---
+<section id="toy-fair" class="scroll-mt-24 px-4 sm:px-6 lg:px-8" aria-labelledby="toy-fair-title">
+  <div class="reveal relative mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] border-4 border-ink bg-periwinkle md:grid-cols-[auto_1fr]">
+    <!-- Ticket stub date -->
+    <div class="relative flex items-center justify-center gap-6 border-b-4 border-dashed border-ink/30 bg-butter px-8 py-8 md:flex-col md:border-b-0 md:border-r-4 md:px-12 md:py-12">
+      <div class="text-center">
+        <p class="eyebrow text-ink-soft">Feb 2027</p>
+        <p class="whitespace-nowrap font-display text-5xl font-extrabold leading-none sm:text-7xl">20<span class="text-ink/40">–</span>23</p>
+      </div>
+      <div class="rounded-2xl border-2 border-ink bg-white px-4 py-2 text-center shadow-[0_3px_0_var(--color-ink)]">
+        <p class="font-display text-2xl font-bold leading-none" data-days>—</p>
+        <p class="eyebrow mt-1 whitespace-nowrap text-[10px] text-ink-soft" data-days-label>days to go</p>
+      </div>
+      <!-- punched holes -->
+      <span class="absolute -right-4 -top-4 hidden size-8 rounded-full border-4 border-ink bg-cream md:block" aria-hidden="true"></span>
+      <span class="absolute -bottom-4 -right-4 hidden size-8 rounded-full border-4 border-ink bg-cream md:block" aria-hidden="true"></span>
+    </div>
+
+    <div class="relative p-6 sm:p-10 lg:p-12">
+      <Icon name="paw" class="pointer-events-none absolute -right-6 -top-6 size-48 rotate-12 text-white/15" />
+      <p class="eyebrow text-ink">Exhibiting · Booth + meetings</p>
+      <h2 id="toy-fair-title" class="mt-3 text-3xl font-extrabold sm:text-5xl">Visit Dog Park at {toyFair.name}.</h2>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-ink/80">
+        Dog Park is exhibiting at Toy Fair, the Toy Association’s big trade show, where 700+ exhibitors preview the newest
+        board games and toys. Retailers, buyers, and press: stop by the booth to see the game and meet Brenda, the artist
+        behind the labyrinth. Want dedicated time? Book a meeting below.
+      </p>
+
+      <div class="mt-7 inline-flex items-center gap-4 rounded-2xl border-2 border-ink bg-cream px-5 py-3 shadow-[0_4px_0_var(--color-ink)]">
+        <span class="grid size-11 place-items-center rounded-xl bg-lime"><Icon name="paw" class="size-6 -rotate-12" /></span>
+        <div>
+          <p class="eyebrow text-[11px] text-ink-soft">Find our booth</p>
+          <p class="font-display text-2xl font-extrabold leading-tight">
+            {toyFair.booth ? <>Booth {toyFair.booth}</> : <>Booth # <span class="text-ink/50">coming soon</span></>}
+          </p>
+        </div>
+      </div>
+
+      <dl class="mt-8 grid gap-4 text-ink sm:grid-cols-2">
+        <div class="flex gap-3">
+          <Icon name="pin" class="mt-0.5 size-5 shrink-0" />
+          <div>
+            <dt class="font-display font-semibold">{toyFair.venue}</dt>
+            <dd class="text-sm text-ink/75"><a href={toyFair.mapUrl} target="_blank" rel="noopener" class="underline underline-offset-4 hover:text-ink">{toyFair.address}</a></dd>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <Icon name="check" class="mt-0.5 size-5 shrink-0" />
+          <div>
+            <dt class="font-display font-semibold">Trade-only event</dt>
+            <dd class="text-sm text-ink/75">Open to verified industry professionals and media. Not open to the public.</dd>
+          </div>
+        </div>
+      </dl>
+
+      <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+        <a href={toyFair.meetingMailto} class="btn btn-dark">Set up a meeting <Icon name="mail" class="size-5" /></a>
+        <a href={toyFair.calendarFile} download class="btn btn-ghost">Add to calendar</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const start = new Date('2027-02-20T00:00:00-05:00');
+  const end = new Date('2027-02-23T23:59:59-05:00');
+  const now = new Date();
+  const days = document.querySelector<HTMLElement>('#toy-fair [data-days]')!;
+  const label = document.querySelector<HTMLElement>('#toy-fair [data-days-label]')!;
+  if (now < start) {
+    const n = Math.ceil((start.getTime() - now.getTime()) / 86_400_000);
+    days.textContent = String(n);
+    label.textContent = n === 1 ? 'day to go' : 'days to go';
+  } else if (now <= end) {
+    days.textContent = 'Now!';
+    label.textContent = 'happening';
+  } else {
+    days.textContent = 'Thanks!';
+    label.textContent = 'see you next year';
+  }
+</script>

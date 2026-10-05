@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+---
+<Layout title="Cart">
+  <PageHero eyebrow="Your cart" title="Fetch your goodies." />
+
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div id="cart-empty" class="card hidden px-6 py-16 text-center">
+      <div class="mx-auto grid size-20 place-items-center rounded-full bg-lime-soft">
+        <Icon name="bone" class="size-10 text-terrier" />
+      </div>
+      <h2 class="mt-6 text-2xl font-bold">Your cart is empty</h2>
+      <p class="mt-2 text-ink-soft">Nothing buried here yet.</p>
+      <a href="/products-store" class="btn btn-dark mt-8">Browse the store</a>
+    </div>
+
+    <div id="cart-full" class="hidden gap-8 lg:grid lg:grid-cols-[1fr_380px]">
+      <ul id="cart-items" class="space-y-4"></ul>
+      <aside class="card mt-8 h-fit p-6 lg:sticky lg:top-24 lg:mt-0">
+        <h2 class="text-xl font-bold">Order summary</h2>
+        <dl class="mt-6 space-y-3 text-ink-soft">
+          <div class="flex justify-between"><dt>Subtotal</dt><dd id="subtotal" class="font-semibold text-ink">$0.00</dd></div>
+          <div class="flex justify-between"><dt>Shipping</dt><dd>Calculated at checkout</dd></div>
+        </dl>
+        <button id="checkout" type="button" class="btn btn-dark mt-8 w-full">Checkout <Icon name="arrow" class="size-5" /></button>
+        <p class="mt-4 text-center text-xs text-ink-soft">Secure checkout coming soon.</p>
+      </aside>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  import { readCart, writeCart, toast } from '../lib/cart';
+
+  const list = document.getElementById('cart-items')!;
+  const fmt = (n: number) => `$${n.toFixed(2)}`;
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+  const render = () => {
+    const items = readCart();
+    document.getElementById('cart-empty')!.classList.toggle('hidden', items.length > 0);
+    const full = document.getElementById('cart-full')!;
+    full.classList.toggle('hidden', items.length === 0);
+    full.classList.toggle('block', items.length > 0);
+    list.innerHTML = items
+      .map(
+        (it, i) => `
+      <li class="card flex items-center gap-4 p-4 sm:gap-6">
+        <img src="${esc(it.image)}" alt="" class="size-20 shrink-0 rounded-2xl object-cover sm:size-24" />
+        <div class="min-w-0 flex-1">
+          <h3 class="font-display font-bold leading-tight">${esc(it.name)}</h3>
+          <p class="text-sm text-ink-soft">${esc(it.option)}</p>
+          <div class="mt-3 inline-flex items-center rounded-full border-2 border-ink/15">
+            <button data-dec="${i}" class="grid size-9 place-items-center font-bold" aria-label="Decrease">−</button>
+            <span class="w-6 text-center font-display font-semibold">${it.qty}</span>
+            <button data-inc="${i}" class="grid size-9 place-items-center font-bold" aria-label="Increase">+</button>
+          </div>
+        </div>
+        <div class="flex flex-col items-end gap-3">
+          <span class="font-display font-semibold">${fmt(it.price * it.qty)}</span>
+          <button data-rm="${i}" class="text-sm text-ink-soft underline underline-offset-4 hover:text-token-red">Remove</button>
+        </div>
+      </li>`,
+      )
+      .join('');
+    document.getElementById('subtotal')!.textContent = fmt(items.reduce((s, i) => s + i.price * i.qty, 0));
+  };
+
+  list.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest('button');
+    if (!t) return;
+    const items = readCart();
+    if (t.dataset.inc) items[+t.dataset.inc].qty = Math.min(items[+t.dataset.inc].qty + 1, 10);
+    if (t.dataset.dec) {
+      const it = items[+t.dataset.dec];
+      it.qty -= 1;
+      if (it.qty < 1) items.splice(+t.dataset.dec, 1);
+    }
+    if (t.dataset.rm) items.splice(+t.dataset.rm, 1);
+    writeCart(items);
+    render();
+  });
+
+  document.getElementById('checkout')!.addEventListener('click', () => toast('Checkout opens with pre-orders in mid-November!'));
+  render();
+</script>

@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Dog Park Games//Toy Fair 2027//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:toyfair-2027@dogparkgames.com
+DTSTAMP:20261004T000000Z
+DTSTART;VALUE=DATE:20270220
+DTEND;VALUE=DATE:20270224
+SUMMARY:Toy Fair 2027 - visit the Dog Park booth
+LOCATION:Jacob K. Javits Convention Center\, 429 11th Ave\, New York\, NY 10001
+DESCRIPTION:Dog Park: A Get Lost! Game is exhibiting at Toy Fair. Stop by the booth to see the game and meet creator Brenda Pokorny. Trade-only event for verified industry professionals and press. Contact help@dogparkgames.com to set up a meeting.
+URL:https://dogpark-site-production.up.railway.app/#toy-fair
+END:VEVENT
+END:VCALENDAR

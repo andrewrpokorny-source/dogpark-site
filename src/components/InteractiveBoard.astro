@@ -1,0 +1,223 @@
+---
+import { Image } from 'astro:assets';
+import board from '../assets/game-board.webp';
+
+type Kind = 'goal' | 'place' | 'space';
+interface Spot {
+  id: string;
+  title: string;
+  kind: Kind;
+  /** position on the board artwork, in percent */
+  x: number;
+  y: number;
+  body: string;
+  /** section on /how-to-play with the full rule */
+  rule?: string;
+}
+
+// Coordinates measured against Brenda's board art; text paraphrases the rules on this page.
+const spots: Spot[] = [
+  { id: 'start', title: 'START', kind: 'goal', x: 49.5, y: 92.5, rule: 'setup',
+    body: 'Every dog begins here. First player to roll a 4 goes first, then play moves clockwise.' },
+  { id: 'paw', title: 'PAW print', kind: 'space', x: 73.9, y: 71.9, rule: 'play',
+    body: 'Draw the top PAW card and follow it. It might be a CHOICE, a trivia QUESTION, or a trip to the dog house.' },
+  { id: 'bone', title: 'Bone space', kind: 'space', x: 63.3, y: 26.4, rule: 'play',
+    body: 'Take 1 bone from the Dog Warden’s bone pile and put it in your home space.' },
+  { id: 'pup-cup', title: 'PUP CUP', kind: 'space', x: 25.3, y: 31.1, rule: 'play',
+    body: 'A treat! Choose either 1 bone or 1 heart from the Dog Warden.' },
+  { id: 'steal', title: 'STEAL ONE BONE', kind: 'space', x: 76.4, y: 58.9, rule: 'play',
+    body: 'Steal 1 bone from any player, even a dog already at the center. If nobody has one, take a bone from the Dog Warden.' },
+  { id: 'bad-dog', title: 'BAD DOG', kind: 'space', x: 33.9, y: 27.8, rule: 'dog-house',
+    body: 'Uh oh. Land here and you’re sent straight to the Dog House.' },
+  { id: 'dog-house', title: 'The Dog House', kind: 'place', x: 22.8, y: 22.2, rule: 'dog-house',
+    body: 'Roll a 2, 4, or 6 to get out. Then move to DOG HOUSE EXIT and roll again.' },
+  { id: 'dog-house-exit', title: 'Dog House Exit', kind: 'space', x: 38.3, y: 21.1, rule: 'dog-house',
+    body: 'Where freed pups rejoin the path after escaping the Dog House.' },
+  { id: 'paw-spa', title: 'The Paw Spa', kind: 'place', x: 78.9, y: 22.2, rule: 'paw-spa',
+    body: 'Lose 1 turn, but add 1 diamond. Pampering takes time.' },
+  { id: 'spa-exit', title: 'Spa Exit', kind: 'space', x: 24.4, y: 46.7, rule: 'paw-spa',
+    body: 'After your turn at the spa, move here. On your next turn, roll and carry on.' },
+  { id: 'dr-bens', title: 'Dr. Ben’s Dog Clinic', kind: 'place', x: 22.2, y: 78.9, rule: 'dr-bens',
+    body: 'Lose 1 turn, but add 1 bone. Every good patient gets a treat.' },
+  { id: 'cross', title: 'The Cross', kind: 'space', x: 42.2, y: 24.2, rule: 'dr-bens',
+    body: 'Discharged from Dr. Ben’s? Move your dog here, then roll on your next turn.' },
+  { id: 'dog-park', title: 'The Dog Park', kind: 'place', x: 80.8, y: 81.1, rule: 'dog-park',
+    body: 'The trading post. Once you’ve passed the DOG PARK sign, play a DOG PARK card to come here and make doggy deals: 1 trade per turn.' },
+  { id: 'dog-park-exit', title: 'Dog Park Exit', kind: 'space', x: 82.2, y: 54.2, rule: 'trading',
+    body: 'Done trading? Place your dog here, roll the die, and move accordingly.' },
+  { id: 'arrow', title: 'The Arrow', kind: 'space', x: 61.7, y: 72.8, rule: 'strategy',
+    body: 'Near the center without enough tokens? Exit here to re-walk part of the path. Arrow direction only, no skipping ahead!' },
+  { id: 'top-dog', title: 'TOP DOG', kind: 'goal', x: 48.5, y: 46, rule: 'winning',
+    body: 'First dog here with 5 bones, 5 diamonds, and 5 hearts wins. No exact roll needed. But dogs waiting here can be robbed!' },
+];
+
+const kindLabel: Record<Kind, string> = { goal: 'Start & finish', place: 'Special place', space: 'Path space' };
+const kindClass: Record<Kind, string> = {
+  goal: 'bg-token-red text-white',
+  place: 'bg-ink text-lime',
+  space: 'bg-cream text-ink',
+};
+---
+<section id="explore" class="scroll-mt-24" aria-labelledby="explore-title">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="reveal flex flex-col justify-between gap-4 md:flex-row md:items-end">
+      <div>
+        <p class="eyebrow text-lime-deep">Interactive board</p>
+        <h2 id="explore-title" class="mt-3 text-3xl font-bold sm:text-5xl">Take a walk through the park.</h2>
+      </div>
+      <p class="max-w-sm text-ink-soft">Tap any numbered spot to zoom in and see what happens when your dog lands there.</p>
+    </div>
+
+    <div class="reveal mt-10 grid gap-6 lg:grid-cols-[1.25fr_0.75fr] lg:gap-8" data-board>
+      <!-- Board -->
+      <div class="relative overflow-hidden rounded-[2rem] border-4 border-ink bg-ink shadow-2xl">
+        <div data-zoom class="relative origin-center transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)]" style="--z:1">
+          <Image src={board} alt="The Dog Park game board with numbered points of interest" width={1400} class="block w-full select-none" draggable="false" />
+          {spots.map((s, i) => (
+            <button
+              type="button"
+              data-spot={i}
+              aria-label={`${i + 1}. ${s.title}`}
+              class:list={[
+                'pin absolute grid size-7 place-items-center rounded-full border-2 border-ink font-display text-xs font-bold shadow-[0_2px_0_var(--color-ink)] transition-[background,color,box-shadow] sm:size-9 sm:text-sm',
+                kindClass[s.kind],
+              ]}
+              style={`left:${s.x}%;top:${s.y}%`}
+            >{i + 1}</button>
+          ))}
+        </div>
+        <button type="button" data-reset class="absolute bottom-3 right-3 hidden rounded-full border-2 border-ink bg-cream px-4 py-2 font-display text-sm font-semibold shadow-[0_3px_0_var(--color-ink)] transition hover:-translate-y-0.5">
+          Show whole board
+        </button>
+      </div>
+
+      <!-- Detail panel -->
+      <div class="card flex flex-col p-6 sm:p-8" aria-live="polite">
+        <div data-intro>
+          <p class="eyebrow text-lime-deep">{spots.length} stops to discover</p>
+          <h3 class="mt-3 text-2xl font-bold">Pick a spot on the board</h3>
+          <p class="mt-3 text-ink-soft">Or take the guided tour from START all the way to TOP DOG.</p>
+          <ul class="mt-6 space-y-2 text-sm">
+            {(['goal', 'place', 'space'] as Kind[]).map((k) => (
+              <li class="flex items-center gap-3"><span class:list={['size-5 rounded-full border-2 border-ink', kindClass[k]]}></span>{kindLabel[k]}</li>
+            ))}
+          </ul>
+          <button type="button" data-tour class="btn btn-dark mt-8 w-full">Start the tour</button>
+        </div>
+
+        <div data-detail class="hidden flex-1 flex-col">
+          <div class="flex items-center justify-between gap-3">
+            <span data-kind class="eyebrow rounded-full px-3 py-1 text-[11px]"></span>
+            <span data-count class="font-type text-sm text-ink-soft"></span>
+          </div>
+          <h3 data-title class="mt-5 text-3xl font-bold"></h3>
+          <p data-body class="mt-4 text-lg leading-relaxed text-ink-soft"></p>
+          <a data-rule href="#" class="mt-5 inline-flex items-center gap-1 self-start font-display text-sm font-semibold underline decoration-lime decoration-2 underline-offset-4 hover:decoration-ink">Read the full rule ↓</a>
+          <div class="mt-auto flex gap-3 pt-8">
+            <button type="button" data-prev class="btn btn-ghost flex-1 !px-4" aria-label="Previous spot">←<span class="hidden sm:inline">Prev</span></button>
+            <button type="button" data-next class="btn btn-primary flex-[2]">Next stop →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline type="application/json" data-spots set:html={JSON.stringify(spots.map((s) => ({ ...s, kindLabel: kindLabel[s.kind], kindClass: kindClass[s.kind] })))}></script>
+</section>
+
+<style>
+  .pin {
+    transform: translate(-50%, -50%) scale(calc(1 / var(--z)));
+  }
+  .pin:hover, .pin:focus-visible {
+    transform: translate(-50%, -50%) scale(calc(1.2 / var(--z)));
+  }
+  .pin[aria-current='true'] {
+    background: var(--color-lime);
+    color: var(--color-ink);
+    transform: translate(-50%, -50%) scale(calc(1.35 / var(--z)));
+    box-shadow: 0 0 0 6px rgb(180 203 118 / 0.45), 0 2px 0 var(--color-ink);
+    z-index: 2;
+  }
+  .pin:not([data-seen])::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 9999px;
+    border: 2px solid var(--color-lime);
+    animation: pin-ping 2.2s cubic-bezier(0, 0, .2, 1) infinite;
+  }
+  @keyframes pin-ping { 75%, 100% { transform: scale(1.9); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .pin:not([data-seen])::after { animation: none; }
+    [data-zoom] { transition: none; }
+  }
+</style>
+
+<script>
+  interface Spot { id: string; title: string; x: number; y: number; body: string; rule?: string; kindLabel: string; kindClass: string }
+
+  document.querySelectorAll<HTMLElement>('[data-board]').forEach((root) => {
+    const section = root.closest('section')!;
+    const spots: Spot[] = JSON.parse(section.querySelector('[data-spots]')!.textContent!);
+    const zoom = root.querySelector<HTMLElement>('[data-zoom]')!;
+    const pins = [...root.querySelectorAll<HTMLButtonElement>('[data-spot]')];
+    const intro = root.querySelector<HTMLElement>('[data-intro]')!;
+    const detail = root.querySelector<HTMLElement>('[data-detail]')!;
+    const reset = root.querySelector<HTMLElement>('[data-reset]')!;
+    const $ = (sel: string) => detail.querySelector<HTMLElement>(sel)!;
+    const Z = 2.2;
+    let current = -1;
+
+    const setZoom = (s: Spot | null) => {
+      if (!s) {
+        zoom.style.setProperty('--z', '1');
+        zoom.style.transform = '';
+        reset.classList.add('hidden');
+        return;
+      }
+      // Keep the focused spot centered without showing empty space past the board edges.
+      const clamp = (v: number) => Math.min(Math.max(v, 50 / Z), 100 - 50 / Z);
+      const tx = (50 - clamp(s.x)) * Z;
+      const ty = (50 - clamp(s.y)) * Z;
+      zoom.style.setProperty('--z', String(Z));
+      zoom.style.transform = `translate(${tx}%, ${ty}%) scale(${Z})`;
+      reset.classList.remove('hidden');
+    };
+
+    const show = (i: number) => {
+      current = (i + spots.length) % spots.length;
+      const s = spots[current];
+      pins.forEach((p, j) => p.setAttribute('aria-current', String(j === current)));
+      pins[current].dataset.seen = '';
+      intro.classList.add('hidden');
+      detail.classList.remove('hidden');
+      detail.classList.add('flex');
+      const kind = $('[data-kind]');
+      kind.className = `eyebrow rounded-full border-2 border-ink px-3 py-1 text-[11px] ${s.kindClass}`;
+      kind.textContent = s.kindLabel;
+      $('[data-count]').textContent = `${current + 1} / ${spots.length}`;
+      $('[data-title]').textContent = s.title;
+      $('[data-body]').textContent = s.body;
+      const rule = $('[data-rule]') as HTMLAnchorElement;
+      rule.classList.toggle('hidden', !s.rule || !document.getElementById(s.rule));
+      if (s.rule) rule.href = `#${s.rule}`;
+      setZoom(s);
+    };
+
+    pins.forEach((p, i) => p.addEventListener('click', () => show(i)));
+    root.querySelector('[data-tour]')!.addEventListener('click', () => show(0));
+    $('[data-next]').addEventListener('click', () => show(current + 1));
+    $('[data-prev]').addEventListener('click', () => show(current - 1));
+    reset.addEventListener('click', () => {
+      setZoom(null);
+      pins.forEach((p) => p.setAttribute('aria-current', 'false'));
+    });
+    root.addEventListener('keydown', (e) => {
+      if (current < 0) return;
+      if (e.key === 'ArrowRight') show(current + 1);
+      if (e.key === 'ArrowLeft') show(current - 1);
+      if (e.key === 'Escape') reset.click();
+    });
+  });
+</script>

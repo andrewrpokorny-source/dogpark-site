@@ -1,0 +1,258 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import BoardCrop from '../components/BoardCrop.astro';
+import InteractiveBoard from '../components/InteractiveBoard.astro';
+import board from '../assets/game-board.webp';
+import drBens from '../assets/dr-bens.webp';
+import parkSign from '../assets/dog-park-sign.webp';
+
+const toc = [
+  ['setup', 'Before you begin'],
+  ['play', 'To begin play'],
+  ['dr-bens', 'Dr. Ben’s Dog Clinic'],
+  ['paw-spa', 'The Paw Spa'],
+  ['dog-house', 'The Dog House'],
+  ['dog-park', 'The Dog Park'],
+  ['choice', 'CHOICE cards'],
+  ['question', 'QUESTION cards'],
+  ['transactions', 'Trades & playing cards'],
+  ['trading', 'Trading'],
+  ['strategy', 'Strategy'],
+  ['winning', 'Winning the game'],
+];
+
+const spaces = [
+  { name: 'BONE', what: 'Take 1 bone from the Dog Warden’s bone pile.', icon: 'bone', tone: 'bg-butter' },
+  { name: 'PAW print', what: 'Draw the top PAW card and follow its instructions.', icon: 'paw', tone: 'bg-lime-soft' },
+  { name: 'PUP CUP', what: 'Choose 1 bone or 1 heart from the Dog Warden.', icon: 'heart', tone: 'bg-coral/30' },
+  { name: 'STEAL ONE BONE', what: 'Steal 1 bone from any player, even one at the center.', icon: 'bone', tone: 'bg-mauve/30' },
+] as const;
+---
+<Layout title="How to Play" description="The complete rules for Dog Park: A Get Lost! Game.">
+  <PageHero eyebrow="The rules" title="How to play Dog Park." lede="Be first to the center of the labyrinth, collecting bones, diamonds, and hearts along the way." />
+
+  <!-- At a glance -->
+  <section class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="reveal grid overflow-hidden rounded-[2rem] border-4 border-ink bg-ink text-cream md:grid-cols-[1.1fr_0.9fr]">
+      <div class="p-6 sm:p-10">
+        <p class="eyebrow text-lime">To win</p>
+        <p class="mt-4 font-display text-2xl font-bold leading-snug sm:text-3xl">
+          Arrive at the center circle with at least 5 bones, 5 diamonds, and 5 hearts.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <span class="flex items-center gap-2 rounded-full bg-butter px-4 py-2 font-display font-bold text-ink"><Icon name="bone" class="size-5 text-terrier" />× 5</span>
+          <span class="flex items-center gap-2 rounded-full bg-periwinkle px-4 py-2 font-display font-bold text-ink"><Icon name="diamond" class="size-5 text-white" />× 5</span>
+          <span class="flex items-center gap-2 rounded-full bg-coral px-4 py-2 font-display font-bold text-ink"><Icon name="heart" class="size-5 text-token-red" />× 5</span>
+        </div>
+        <dl class="mt-10 grid grid-cols-2 gap-6 border-t border-cream/15 pt-8 text-sm">
+          <div><dt class="eyebrow text-[11px] text-cream/50">You’ll need</dt><dd class="mt-1 font-display font-semibold">Board, die, dog pieces, cards & tokens</dd></div>
+          <div><dt class="eyebrow text-[11px] text-cream/50">Who goes first</dt><dd class="mt-1 font-display font-semibold">First to roll a 4, then clockwise</dd></div>
+        </dl>
+      </div>
+      <a href="#explore" class="group relative block bg-ink p-4 sm:p-6" aria-label="Explore the interactive board">
+        <Image src={board} alt="The Dog Park game board" width={1000} class="mx-auto w-full max-w-md rounded-xl transition-transform duration-700 group-hover:scale-[1.03]" />
+        <span class="absolute bottom-4 right-4 rounded-full bg-cream px-4 py-2 font-display text-sm font-semibold text-ink shadow-lg">Explore the board ↓</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="pt-20 md:pt-28">
+    <InteractiveBoard />
+  </div>
+
+  <div class="mx-auto max-w-7xl px-4 pt-20 sm:px-6 md:pt-28 lg:px-8">
+    <p class="eyebrow text-lime-deep">The full rules</p>
+    <h2 class="mt-3 text-3xl font-bold sm:text-5xl">Everything, step by step.</h2>
+  </div>
+
+  <!-- Mobile chip nav -->
+  <nav class="sticky top-[68px] z-30 mt-10 border-y border-ink/10 bg-cream/90 backdrop-blur-md lg:hidden" aria-label="Rules sections">
+    <ul class="flex gap-2 overflow-x-auto px-4 py-3 [scrollbar-width:none]">
+      {toc.map(([id, label]) => (
+        <li><a href={`#${id}`} data-toc-link={id} class="block whitespace-nowrap rounded-full border-2 border-ink/15 bg-white px-3.5 py-1.5 font-display text-sm font-medium transition">{label}</a></li>
+      ))}
+    </ul>
+  </nav>
+
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 pt-10 sm:px-6 lg:grid-cols-[260px_1fr] lg:pt-16 lg:px-8">
+    <!-- Desktop TOC -->
+    <aside class="hidden lg:block">
+      <nav class="sticky top-28" aria-label="Rules sections">
+        <p class="eyebrow mb-4 text-ink-soft">On this page</p>
+        <ul class="space-y-1 border-l-2 border-ink/10">
+          {toc.map(([id, label]) => (
+            <li><a href={`#${id}`} data-toc-link={id} class="-ml-0.5 block border-l-2 border-transparent py-1.5 pl-4 text-[15px] text-ink-soft transition hover:text-ink">{label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </aside>
+
+    <article class="prose-rules max-w-3xl space-y-16">
+      <section id="setup" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">Before you begin</h2>
+        <ol>
+          <li>Each player selects one of the rectangular spaces around the perimeter of the game board as <strong>home</strong>.</li>
+          <li>Each player selects 1 dog playing piece, and sets it on the <strong>START</strong> space.</li>
+          <li>Give each player 1 <strong>PAW DOG PARK</strong> card. Shuffle the remaining PAW cards, and place them face down on the PAW PRINT card space.</li>
+          <li>Shuffle the <strong>DOGGY DOOR</strong> cards, and place them face down on the DOGGY DOOR card space.</li>
+          <li>Shuffle the <strong>QUESTION</strong> cards and place them face down on the QUESTION MARK space.</li>
+        </ol>
+      </section>
+
+      <section id="play" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">To begin play</h2>
+        <p>Each player rolls the die. 1st player to roll a 4 goes first, then play progresses clockwise. Players take turns rolling the die, and moving that number of spaces along the labyrinth path.</p>
+        <div class="my-8 grid gap-3 sm:grid-cols-2">
+          {spaces.map((s) => (
+            <div class="flex gap-4 rounded-2xl border-2 border-ink/10 bg-white p-4">
+              <span class:list={['grid size-12 shrink-0 place-items-center rounded-xl', s.tone]}><Icon name={s.icon} class="size-6" /></span>
+              <div>
+                <p class="font-display font-bold">{s.name}</p>
+                <p class="!mb-0 text-sm">{s.what}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p>If you land on a space with a <strong>BONE</strong>, take 1 bone from the Dog Warden’s bone pile, and place it in your home space on the game board. If you land on a <strong>PAW</strong> print, take the top card from the PAW card stack, and follow instructions on the card. If you land on a <strong>PUP CUP</strong> space, choose either 1 bone or 1 heart from the Dog Warden’s bone pile, and place it in your home space. If you land on a <strong>STEAL ONE BONE</strong> space, you may steal 1 bone from any player, including a dog that has arrived at the center of the labyrinth. If no player has a bone, take 1 bone from the Dog Warden’s bone pile, and place it in your home space.</p>
+        <div class="my-6 rounded-2xl border-l-4 border-terrier bg-butter/40 p-5">
+          <p class="!mb-0">If you have the opportunity to take a token from the Dog Warden, but none of that token remains in the Dog Warden’s bone pile, you do not get to take that token. You may not swap a different token if none of the type you were instructed to take remains. For example, if you draw a PAW card that tells you to take a bone, but the Dog Warden’s bone supply is empty, you may not take a heart token instead. If you draw a CHOICE card, you may select your choice of token from the Dog Warden.</p>
+        </div>
+      </section>
+
+      <section id="dr-bens" class="scroll-mt-36 lg:scroll-mt-28">
+        <div class="grid items-start gap-6 sm:grid-cols-[1fr_180px]">
+          <div>
+            <h2 class="mb-6 text-3xl font-bold">Dr. Ben’s Dog Clinic</h2>
+            <p>If sent to Dr. Ben’s, move your dog playing piece to Dr. Ben’s clinic. You <strong>lose 1 turn, but add 1 bone</strong>. Take 1 bone from the Dog Warden’s bone pile, and place it in your home space. When your 1st turn is up, move your dog to the space marked with the CROSS. On your next turn, roll the die and move accordingly.</p>
+          </div>
+          <Image src={drBens} alt="Dr. Ben's clinic" width={360} class="order-first w-32 rotate-3 rounded-2xl border-4 border-ink sm:order-none sm:w-full" />
+        </div>
+      </section>
+
+      <section id="paw-spa" class="scroll-mt-36 lg:scroll-mt-28">
+        <div class="grid items-start gap-6 sm:grid-cols-[1fr_180px]">
+          <div>
+            <h2 class="mb-6 text-3xl font-bold">The Paw Spa</h2>
+            <p>If sent to the PAW SPA, move your dog playing piece to the PAW SPA. You <strong>lose 1 turn, but add 1 diamond</strong>. Take 1 diamond from the Dog Warden’s bone pile, and place it in your home space. When your 1st turn is up, move your dog to the space marked SPA EXIT. On your next turn, roll the die and move accordingly.</p>
+          </div>
+          <BoardCrop x={0.79} y={0.2} zoom={4.2} label="The Paw Spa on the board" class="order-first aspect-square w-32 -rotate-3 rounded-2xl border-4 border-ink sm:order-none sm:w-full" />
+        </div>
+      </section>
+
+      <section id="dog-house" class="scroll-mt-36 lg:scroll-mt-28">
+        <div class="grid items-start gap-6 sm:grid-cols-[1fr_180px]">
+          <div>
+            <h2 class="mb-6 text-3xl font-bold">The Dog House</h2>
+            <p>There are 2 ways to be sent to the DOG HOUSE:</p>
+            <ol>
+              <li>You draw a PAW card that sends you to the DOG HOUSE.</li>
+              <li>You land on a <strong>BAD DOG</strong> space.</li>
+            </ol>
+            <p>Either way, move your dog playing piece to the DOG HOUSE. To exit the DOG HOUSE, you must <strong>roll a 2, 4, or 6</strong>. When you roll a 2, 4, or 6, move your dog to the DOG HOUSE EXIT space, and roll again. Proceed to move accordingly.</p>
+          </div>
+          <BoardCrop x={0.21} y={0.21} zoom={4.2} label="The Dog House on the board" class="order-first aspect-square w-32 rotate-2 rounded-2xl border-4 border-ink sm:order-none sm:w-full" />
+        </div>
+      </section>
+
+      <section id="dog-park" class="scroll-mt-36 lg:scroll-mt-28">
+        <div class="grid items-start gap-6 sm:grid-cols-[1fr_180px]">
+          <div>
+            <h2 class="mb-6 text-3xl font-bold">The Dog Park</h2>
+            <p>The DOG PARK is used for making doggy deals. You may use a DOG PARK card to go to the DOG PARK only after you have passed the space marked with the DOG PARK sign. If you choose to use your DOG PARK card to go to the DOG PARK, you must wait until your next turn to make a trade. You may make <strong>1 trade per turn</strong>. You may stay in the DOG PARK for as many consecutive turns as you like.</p>
+          </div>
+          <Image src={parkSign} alt="Dog Park sign" width={500} class="order-first aspect-square w-32 -rotate-2 rounded-2xl border-4 border-ink object-cover object-[68%_50%] sm:order-none sm:w-full" />
+        </div>
+      </section>
+
+      <section id="choice" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">CHOICE cards</h2>
+        <p>If you draw a PAW card that says CHOICE, you may use it immediately to take 1 bone, or 1 diamond, or 1 heart from the Dog Warden’s bone pile. You may save the CHOICE card to use on a future turn. If you save it to use on a future turn, you must play it before you roll the die on that turn.</p>
+      </section>
+
+      <section id="question" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">QUESTION cards</h2>
+        <p>If you draw a PAW card that has a QUESTION MARK on it, have the player to your right draw the top QUESTION card, and read the doggy trivia question out loud. If you answer the question correctly, you may choose 1 bone, or 1 diamond, or 1 heart from the Dog Warden’s bone pile, and place it in your home space. If you answer incorrectly, you neither win nor lose anything.</p>
+      </section>
+
+      <section id="transactions" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">Making trades or playing cards</h2>
+        <div class="rounded-2xl border-2 border-ink bg-lime-soft p-5 font-display font-semibold">
+          Only 1 transaction may be made per turn, and always <em>before</em> you roll the die.
+        </div>
+        <p class="mt-6">Always make your trade, or play your CHOICE or STEAL or redeem your DOGGY DOOR card before you roll the die on your turn. If you are in the DOG PARK, and make a trade either with another dog, the Dog Warden, or via a DOGGY DOOR, you may only make 1 trade per turn.</p>
+      </section>
+
+      <section id="trading" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">Trading</h2>
+        <p>There are 3 ways to trade.</p>
+        <div class="grid gap-4">
+          <div class="card p-6">
+            <p class="eyebrow text-lime-deep">1 · The Dog Warden</p>
+            <p class="!mb-0 mt-3">You can trade with the Dog Warden at a <strong>2:1 trade ratio</strong>. You may trade 2 bones, or 2 diamonds, or 2 hearts, for 1 bone, or 1 diamond, or 1 heart. For example, you may trade away 2 bones for 1 diamond. You must trade away 2 of the same token. You may not trade away 1 heart and 1 diamond for 1 bone.</p>
+          </div>
+          <div class="card p-6">
+            <p class="eyebrow text-lime-deep">2 · DOGGY DOOR</p>
+            <p class="!mb-0 mt-3">These cards depict either 1 bone, or 1 diamond, or 1 heart. While in the DOG PARK, you may trade 1 bone, or 1 diamond, or 1 heart for 1 DOGGY DOOR card. You may redeem your DOGGY DOOR card immediately or save it to redeem on a later turn.</p>
+          </div>
+          <div class="card p-6">
+            <p class="eyebrow text-lime-deep">3 · Other dogs</p>
+            <p class="!mb-0 mt-3">When in the DOG PARK, you can trade with other dogs in the park, making deals agreeable to both dogs. You may negotiate with other dogs to meet in the park in order to trade. <strong>No trades may be made outside of the DOG PARK.</strong></p>
+          </div>
+        </div>
+        <p class="mt-6">To exit the DOG PARK, place your dog on the DOG PARK EXIT space, roll the die and move accordingly.</p>
+      </section>
+
+      <section id="strategy" class="scroll-mt-36 lg:scroll-mt-28">
+        <h2 class="mb-6 text-3xl font-bold">Strategy</h2>
+        <p>If your dog is approaching the center of the labyrinth, but does not have the required 5 bones, and 5 diamonds, and 5 hearts, you may exit the labyrinth path at the <strong>ARROW</strong> space, which lets your dog re-walk a portion of the path. Follow the path according to your die roll. You may not skip ahead in the labyrinth via the ARROW space. You may only move in the direction of the ARROW. You may play a DOG PARK card, if you have one, to go to the DOG PARK.</p>
+        <div class="rounded-2xl border-l-4 border-token-red bg-coral/20 p-5">
+          <p class="!mb-0"><strong>Keep in mind</strong> that dogs that have arrived at the center of the labyrinth are vulnerable to having their tokens stolen.</p>
+        </div>
+      </section>
+
+      <section id="winning" class="scroll-mt-36 lg:scroll-mt-28">
+        <div class="grass-bg relative overflow-hidden rounded-[2rem] border-4 border-ink p-6 sm:p-10" style="background-size:auto 160%">
+          <div class="absolute inset-0 bg-grass-dark/60" aria-hidden="true"></div>
+          <div class="relative text-cream">
+            <p class="eyebrow text-lime">Winning the game</p>
+            <h2 class="mt-3 text-3xl font-extrabold sm:text-4xl">Become TOP DOG.</h2>
+            <p class="mt-5 !text-cream/90">The first dog to arrive at the center space in the labyrinth, while having 5 bones, and 5 diamonds, and 5 hearts is the winner and TOP DOG. You do not need to roll the exact number of spaces to win.</p>
+          </div>
+        </div>
+        <h3 class="mb-4 mt-10 text-xl font-bold">What if you arrive without all 15 tokens?</h3>
+        <p>For example, you have passed the last PAW PRINT space, and another player steals one of your tokens, taking your number of tokens below the required amount needed to win. If you have a DOG PARK card, you may use it at the beginning of your next turn to go to the DOG PARK. If you do not have a DOG PARK card, place your dog token onto one of the semi-circular spaces around the central circle, and wait to see if there is a game winner.</p>
+        <p>If all players arrive at the central circle without having gathered all of the necessary tokens, the dog with the <strong>most total tokens</strong> is TOP DOG.</p>
+      </section>
+    </article>
+  </div>
+</Layout>
+
+<script>
+  // Highlight the section currently in view
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]');
+  const setActive = (id: string) =>
+    links.forEach((a) => {
+      const on = a.dataset.tocLink === id;
+      const row = a.closest('ul')!;
+      if (row.classList.contains('overflow-x-auto')) {
+        // mobile chips
+        a.classList.toggle('!border-ink', on);
+        a.classList.toggle('!bg-ink', on);
+        a.classList.toggle('!text-cream', on);
+        if (on) row.scrollTo({ left: a.offsetLeft - row.clientWidth / 2 + a.clientWidth / 2, behavior: 'smooth' });
+      } else {
+        // desktop sidebar
+        a.classList.toggle('!border-ink', on);
+        a.classList.toggle('!text-ink', on);
+        a.classList.toggle('font-semibold', on);
+      }
+    });
+  const io = new IntersectionObserver(
+    (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+    { rootMargin: '-30% 0px -60% 0px' },
+  );
+  document.querySelectorAll('article section[id]').forEach((s) => io.observe(s));
+</script>

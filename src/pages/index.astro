@@ -1,0 +1,303 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import BoardCrop from '../components/BoardCrop.astro';
+import ToyFair from '../components/ToyFair.astro';
+import MeetThePups from '../components/MeetThePups.astro';
+import board from '../assets/game-board.webp';
+import drBens from '../assets/dr-bens.webp';
+import parkSign from '../assets/dog-park-sign.webp';
+import DoggyDoor from '../components/DoggyDoor.astro';
+import magnetOnCar from '../assets/magnet-on-car-lime.webp';
+import teeFolded from '../assets/tee-folded.webp';
+
+const goals = [
+  { icon: 'bone', name: 'Bones', color: 'text-terrier', bg: 'bg-butter/50', blurb: 'Land on bone spaces, Pup Cups, or swipe one with Steal One Bone.' },
+  { icon: 'diamond', name: 'Diamonds', color: 'text-periwinkle', bg: 'bg-periwinkle/20', blurb: 'Treat yourself at the Paw Spa, or win them from PAW cards and trivia.' },
+  { icon: 'heart', name: 'Hearts', color: 'text-token-red', bg: 'bg-coral/25', blurb: 'Pick them from Pup Cups, CHOICE cards, and doggy deals in the park.' },
+] as const;
+
+const steps = [
+  { n: '01', title: 'Roll', body: 'Roll the die and trot your pup that many spaces along the winding labyrinth path.', icon: 'dice' },
+  { n: '02', title: 'Land', body: 'Bones, PAW cards, Pup Cups, trivia, or (uh oh) a BAD DOG space and a trip to the dog house.', icon: 'paw' },
+  { n: '03', title: 'Trade', body: 'Head to the Dog Park to make doggy deals with other players and the Dog Warden.', icon: 'heart' },
+] as const;
+
+const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'Visit Dr. Ben', 'Relax at the Paw Spa', 'Become TOP DOG'];
+---
+<Layout>
+  <!-- HERO -->
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="absolute -right-40 -top-40 size-[640px] rounded-full bg-lime/40 blur-3xl"></div>
+      <div class="absolute -left-40 bottom-0 size-[420px] rounded-full bg-butter/50 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-8 sm:px-6 md:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-8 lg:px-8 lg:pb-24">
+      <div class="reveal text-center lg:text-left">
+        <p class="eyebrow inline-flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-1.5 text-ink">
+          <span class="size-2 rounded-full bg-token-red"></span> Pre-orders mid-November
+        </p>
+        <h1 class="mt-6 text-[clamp(2.75rem,8vw,5.5rem)] font-extrabold leading-[0.95]">
+          Get lost in the{' '}
+          <span class="relative inline-block whitespace-nowrap">
+            <span class="relative z-10">dog park.</span>
+            <svg class="absolute -bottom-2 left-0 z-0 h-5 w-full text-lime" viewBox="0 0 300 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 14C60 4 140 2 296 10" stroke="currentColor" stroke-width="12" fill="none" stroke-linecap="round"/></svg>
+          </span>
+        </h1>
+        <p class="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-ink-soft sm:text-xl lg:mx-0">
+          Move your dog token through the labyrinth, collecting <strong class="text-ink">bones</strong>,{' '}
+          <strong class="text-ink">diamonds</strong>, and{' '} <strong class="text-ink">hearts</strong> along the path.
+          But don’t get sent to the dog house…
+        </p>
+        <div class="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+          <a href="/notify-me" class="btn btn-dark w-full sm:w-auto">Notify me at launch <Icon name="arrow" class="size-5" /></a>
+          <a href="/how-to-play" class="btn btn-ghost w-full sm:w-auto">How to play</a>
+        </div>
+        <ul class="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm font-semibold text-ink-soft lg:justify-start">
+          <li class="flex items-center gap-2"><Icon name="paw" class="size-5 text-lime-deep" /> Family-friendly, all ages</li>
+          <li class="flex items-center gap-2"><Icon name="check" class="size-5 text-lime-deep" /> Patent pending</li>
+          <li class="flex items-center gap-2"><Icon name="heart" class="size-5 text-coral" /> From Mooresville, NC</li>
+        </ul>
+      </div>
+
+      <div class="reveal relative mx-auto w-full max-w-[560px]" data-delay="1">
+        <div data-tilt class="tilt relative">
+          <div class="absolute inset-6 rounded-[2rem] bg-ink" style="transform: rotate(4deg)" aria-hidden="true"></div>
+          <div class="relative rotate-[-2deg] overflow-hidden rounded-[2rem] border-4 border-ink shadow-2xl transition-transform duration-500 hover:rotate-0 hover:scale-[1.02]">
+            <Image src={board} alt="The Dog Park game board: a winding labyrinth path on green grass leading to the TOP DOG circle" width={1120} class="block w-full" loading="eager" fetchpriority="high" />
+          </div>
+          <!-- floating tokens -->
+          <div class="bob tilt-pop absolute -left-3 top-10 grid size-16 place-items-center rounded-2xl border-2 border-ink bg-butter shadow-[0_4px_0_var(--color-ink)] sm:-left-6 sm:size-20" style="--r:-10deg" aria-hidden="true">
+            <Icon name="bone" class="size-9 text-terrier sm:size-11" />
+          </div>
+          <div class="bob tilt-pop absolute -right-2 top-1/3 grid size-14 place-items-center rounded-2xl border-2 border-ink bg-periwinkle shadow-[0_4px_0_var(--color-ink)] sm:-right-6 sm:size-18" style="--r:8deg;animation-delay:-1.6s" aria-hidden="true">
+            <Icon name="diamond" class="size-8 text-white sm:size-10" />
+          </div>
+          <div class="bob tilt-pop absolute -bottom-4 left-1/4 grid size-14 place-items-center rounded-2xl border-2 border-ink bg-coral shadow-[0_4px_0_var(--color-ink)] sm:size-16" style="--r:-4deg;animation-delay:-3.2s" aria-hidden="true">
+            <Icon name="heart" class="size-8 text-token-red sm:size-9" />
+          </div>
+          <div class="tilt-pop absolute -bottom-6 -right-4 hidden rotate-6 rounded-2xl border-2 border-ink bg-white px-4 py-3 text-center shadow-[0_4px_0_var(--color-ink)] sm:block">
+            <p class="eyebrow text-[10px] text-ink-soft">Goal</p>
+            <p class="font-display text-lg font-bold leading-tight">TOP DOG</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <section class="overflow-hidden border-y-2 border-ink bg-lime py-4" aria-label="Game highlights">
+    <div class="marquee flex w-max gap-10 whitespace-nowrap font-display text-xl font-bold sm:text-2xl">
+      {[...marquee, ...marquee].map((m) => (
+        <span class="flex items-center gap-10">{m}<Icon name="paw" class="size-6 -rotate-12" /></span>
+      ))}
+    </div>
+  </section>
+
+  <!-- GOAL -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+    <div class="reveal mx-auto max-w-2xl text-center">
+      <p class="eyebrow text-lime-deep">The object of the game</p>
+      <h2 class="mt-4 text-4xl font-bold sm:text-5xl">Five of each. First to the center wins.</h2>
+      <p class="mt-5 text-lg text-ink-soft">Race to the TOP DOG circle at the heart of the labyrinth carrying at least 5 bones, 5 diamonds, and 5 hearts.</p>
+    </div>
+    <div class="mt-14 grid gap-5 md:grid-cols-3">
+      {goals.map((g, i) => (
+        <article class="reveal card group p-7 transition-transform duration-300 hover:-translate-y-1.5" data-delay={String(i + 1)}>
+          <div class:list={['grid size-20 place-items-center rounded-2xl transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-110', g.bg]}>
+            <Icon name={g.icon} class={`size-11 ${g.color}`} />
+          </div>
+          <div class="mt-6 flex items-baseline gap-3">
+            <span class="font-display text-6xl font-extrabold">5</span>
+            <h3 class="text-2xl font-bold">{g.name}</h3>
+          </div>
+          <p class="mt-3 text-ink-soft">{g.blurb}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- HOW A TURN WORKS -->
+  <div class="grass-edge" aria-hidden="true"></div>
+  <section class="relative overflow-hidden bg-ink py-20 text-cream md:py-28">
+    <div class="pointer-events-none absolute -right-24 top-10 opacity-[0.06]" aria-hidden="true">
+      <Icon name="paw" class="spin-slow size-[420px]" />
+    </div>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div>
+          <p class="eyebrow text-lime">On your turn</p>
+          <h2 class="mt-4 max-w-xl text-4xl font-bold sm:text-5xl">Roll. Wander. Wheel and deal.</h2>
+        </div>
+        <a href="/how-to-play" class="btn btn-primary self-start md:self-auto">Read the full rules <Icon name="arrow" class="size-5" /></a>
+      </div>
+      <ol class="mt-14 grid gap-5 md:grid-cols-3">
+        {steps.map((s, i) => (
+          <li class="reveal rounded-3xl border border-cream/15 bg-cream/[0.04] p-7" data-delay={String(i + 1)}>
+            <div class="flex items-center justify-between">
+              <span class="font-type text-lime">{s.n}</span>
+              <Icon name={s.icon} class="size-8 text-lime" />
+            </div>
+            <h3 class="mt-8 text-3xl font-bold">{s.title}</h3>
+            <p class="mt-3 text-cream/70">{s.body}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- PLACES ON THE BOARD -->
+  <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+    <div class="reveal max-w-2xl">
+      <p class="eyebrow text-lime-deep">Around the labyrinth</p>
+      <h2 class="mt-4 text-4xl font-bold sm:text-5xl">Some stops are sweeter than others.</h2>
+      <a href="/how-to-play#explore" class="mt-5 inline-flex items-center gap-2 font-display font-semibold underline decoration-lime decoration-[3px] underline-offset-4 hover:decoration-ink">Explore the interactive board <Icon name="arrow" class="size-4" /></a>
+    </div>
+    <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <article class="reveal card overflow-hidden" data-delay="1">
+        <Image src={drBens} alt="Dr. Ben's blue dog clinic with a terrier in the doorway" width={600} class="aspect-square w-full object-cover" />
+        <div class="p-6">
+          <p class="eyebrow text-periwinkle">Lose a turn · +1 bone</p>
+          <h3 class="mt-2 text-xl font-bold">Dr. Ben’s Dog Clinic</h3>
+          <p class="mt-2 text-sm text-ink-soft">A quick check-up costs you a turn, but every good patient gets a bone.</p>
+        </div>
+      </article>
+      <article class="reveal card overflow-hidden" data-delay="2">
+        <BoardCrop x={0.79} y={0.2} zoom={4.2} label="The Paw Spa on the game board" class="aspect-square w-full bg-grass" />
+        <div class="p-6">
+          <p class="eyebrow text-sage">Lose a turn · +1 diamond</p>
+          <h3 class="mt-2 text-xl font-bold">The Paw Spa</h3>
+          <p class="mt-2 text-sm text-ink-soft">Pampering takes time. Walk out a turn later with a sparkling new diamond.</p>
+        </div>
+      </article>
+      <article class="reveal card overflow-hidden" data-delay="3">
+        <BoardCrop x={0.21} y={0.21} zoom={4.2} label="The pink Dog House on the game board" class="aspect-square w-full bg-grass" />
+        <div class="p-6">
+          <p class="eyebrow text-coral">Roll 2, 4 or 6 to escape</p>
+          <h3 class="mt-2 text-xl font-bold">The Dog House</h3>
+          <p class="mt-2 text-sm text-ink-soft">Land on a BAD DOG space and in you go. Only an even roll sets you free.</p>
+        </div>
+      </article>
+      <article class="reveal card overflow-hidden" data-delay="1">
+        <Image src={parkSign} alt="A terrier sitting on grass looking up at a wooden Dog Park sign" width={800} class="aspect-square w-full object-cover object-[68%_50%]" />
+        <div class="p-6">
+          <p class="eyebrow text-lime-deep">Trading post</p>
+          <h3 class="mt-2 text-xl font-bold">The Dog Park</h3>
+          <p class="mt-2 text-sm text-ink-soft">Play a DOG PARK card to make doggy deals with the other pups and the Dog Warden.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- MEET THE PUPS -->
+  <MeetThePups />
+
+  <!-- MEET THE MAKER -->
+  <section class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-[0.8fr_1.2fr] md:py-28 lg:px-8">
+    <div class="reveal relative mx-auto w-[calc(100%-3rem)] max-w-sm">
+      <div class="absolute -inset-3 rotate-3 rounded-[2rem] bg-lime" aria-hidden="true"></div>
+      <DoggyDoor class="rounded-[1.75rem] border-4 border-ink" width={700} />
+    </div>
+    <div class="reveal" data-delay="1">
+      <p class="eyebrow text-lime-deep">Meet the maker</p>
+      <h2 class="mt-4 text-4xl font-bold sm:text-5xl">Drawn with love, played by families.</h2>
+      <p class="mt-6 text-lg leading-relaxed text-ink-soft">
+        Dog Park is the creation of <strong class="text-ink">Brenda Pokorny</strong>, a mosaic artist, children’s book
+        author-illustrator, and life-long dog lover. She combined her obsession with labyrinths with the joy of a lifetime
+        of best friends, many of whom show up, whimsically, on the board.
+      </p>
+      <a href="/about" class="btn btn-ghost mt-8">Read Brenda’s story <Icon name="arrow" class="size-5" /></a>
+    </div>
+  </section>
+
+  <!-- TOY FAIR -->
+  <div class="pb-20 md:pb-28">
+    <ToyFair />
+  </div>
+
+  <!-- MERCH -->
+  <div class="grass-edge" aria-hidden="true"></div>
+  <section class="bg-lime-soft py-20 md:py-28">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="reveal flex flex-col justify-between gap-6 md:flex-row md:items-end">
+        <div class="max-w-xl">
+          <p class="eyebrow text-lime-deep">While you wait</p>
+          <h2 class="mt-4 text-4xl font-bold sm:text-5xl">Show off your Dog Park spirit.</h2>
+        </div>
+        <a href="/products-store" class="btn btn-dark self-start md:self-auto">Visit the store <Icon name="arrow" class="size-5" /></a>
+      </div>
+      <div class="mt-12 grid gap-5 md:grid-cols-2">
+        {[
+          { img: magnetOnCar, alt: 'Green Dog Park magnet on an SUV', name: 'Car Magnet', price: '$16', note: '7 colors' },
+          { img: teeFolded, alt: 'Folded gray Dog Park long-sleeve tee', name: 'Long-Sleeve Logo Tee', price: 'from $30', note: 'SM – XXL' },
+        ].map((p, i) => (
+          <a href="/products-store" class="reveal card group block overflow-hidden" data-delay={String(i + 1)}>
+            <div class="overflow-hidden">
+              <Image src={p.img} alt={p.alt} width={900} class="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            </div>
+            <div class="flex items-center justify-between p-6">
+              <div>
+                <h3 class="text-xl font-bold">{p.name}</h3>
+                <p class="text-sm text-ink-soft">{p.note}</p>
+              </div>
+              <span class="rounded-full bg-ink px-4 py-1.5 font-display font-semibold text-cream">{p.price}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIFY CTA -->
+  <section class="px-4 pt-20 sm:px-6 md:pt-28 lg:px-8">
+    <div class="reveal grass-bg relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border-4 border-ink px-6 py-16 text-center sm:px-12 md:py-20" style="background-size: auto 140%;">
+      <div class="absolute inset-0 bg-grass-dark/45" aria-hidden="true"></div>
+      <div class="relative">
+        <p class="eyebrow text-lime">Pre-orders open mid-November</p>
+        <h2 class="mx-auto mt-4 max-w-2xl text-4xl font-extrabold text-cream sm:text-6xl">Be first in line at the gate.</h2>
+        <p class="mx-auto mt-5 max-w-lg text-lg text-cream/85">Get word the moment the game is available, plus first look at new merch and expansion packs.</p>
+        <a href="/notify-me" class="btn btn-primary mt-9">Add me to the list <Icon name="arrow" class="size-5" /></a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Hero board leans toward the mouse, like holding the game in your hands (desktop only).
+  const tilt = document.querySelector<HTMLElement>('[data-tilt]');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (tilt && fine && !calm) {
+    const area = tilt.closest('section')!;
+    let raf = 0;
+    area.addEventListener('pointermove', (e) => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const r = tilt.getBoundingClientRect();
+        const dx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width * 0.9)));
+        const dy = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height * 0.9)));
+        tilt.classList.add('tilting');
+        tilt.style.setProperty('--ry', `${(dx * 9).toFixed(2)}deg`);
+        tilt.style.setProperty('--rx', `${(-dy * 7).toFixed(2)}deg`);
+      });
+    });
+    area.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(raf);
+      tilt.classList.remove('tilting');
+      tilt.style.setProperty('--ry', '0deg');
+      tilt.style.setProperty('--rx', '0deg');
+    });
+  }
+</script>
+
+<style>
+  .tilt {
+    transform-style: preserve-3d;
+    transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform .7s cubic-bezier(.2, .7, .2, 1);
+  }
+  .tilt.tilting { transition-duration: .15s; }
+  .tilt-pop { translate: 0 0 45px; }
+</style>

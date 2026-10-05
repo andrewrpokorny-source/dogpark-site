@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import board from '../assets/game-board.webp';
+import DoggyDoor from '../components/DoggyDoor.astro';
+import drBens from '../assets/dr-bens.webp';
+import tokens from '../assets/dog-tokens.webp';
+
+const facts = [
+  { icon: 'heart', label: 'Mosaic artist' },
+  { icon: 'paw', label: 'Children’s book author-illustrator' },
+  { icon: 'bone', label: 'Life-long dog lover' },
+] as const;
+---
+<Layout title="About" description="Dog Park is the creation of Brenda Pokorny, a Mooresville, North Carolina mosaic artist, children's book author-illustrator, and life-long dog lover.">
+  <section class="relative overflow-hidden">
+    <div class="pointer-events-none absolute -right-32 -top-48 size-[520px] rounded-full bg-lime/35 blur-3xl" aria-hidden="true"></div>
+    <div class="relative mx-auto grid max-w-7xl items-center gap-14 px-4 py-10 sm:px-6 md:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:px-8">
+      <div>
+        <p class="reveal eyebrow text-lime-deep">About Dog Park</p>
+        <h1 class="reveal mt-4 text-[clamp(2.5rem,6.5vw,4.5rem)] font-extrabold leading-[1]" data-delay="1">
+          A labyrinth full of best friends.
+        </h1>
+        <p class="reveal mt-8 text-lg leading-relaxed text-ink-soft sm:text-xl" data-delay="2">
+          Dog Park is the creation of <strong class="text-ink">Brenda Pokorny</strong>, a mosaic artist, children’s book
+          author-illustrator, and life-long dog lover. She combines her obsession with labyrinths with the joy she experienced
+          throughout her life with her best friends, many of whom are whimsically represented in this game.
+        </p>
+        <p class="reveal mt-6 font-display text-2xl font-bold" data-delay="3">Enjoy tail-wagging fun!</p>
+        <ul class="reveal mt-10 flex flex-wrap gap-3" data-delay="3">
+          {facts.map((f) => (
+            <li class="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 font-display text-sm font-semibold">
+              <Icon name={f.icon} class="size-4 text-lime-deep" /> {f.label}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="reveal relative mx-auto w-[calc(100%-3rem)] max-w-md" data-delay="2">
+        <div class="absolute -inset-3 rotate-3 rounded-[2rem] bg-lime" aria-hidden="true"></div>
+        <DoggyDoor class="rounded-[1.75rem] border-4 border-ink" eager />
+      </div>
+    </div>
+  </section>
+
+  <!-- Meet the creator (from brendapokornymosaics.com/meet-me) -->
+  <section class="mx-auto max-w-7xl px-4 pt-10 sm:px-6 md:pt-16 lg:px-8" aria-labelledby="creator-title">
+    <div class="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <p class="reveal eyebrow text-lime-deep">Meet the creator</p>
+        <h2 id="creator-title" class="reveal mt-4 text-4xl font-extrabold sm:text-5xl" data-delay="1">Brenda Pokorny</h2>
+        <p class="reveal mt-3 text-lg text-ink-soft" data-delay="1">Mosaic artist · Mooresville, North Carolina</p>
+
+        <figure class="reveal relative mt-10 rounded-[2rem] border-4 border-ink bg-lime p-7 shadow-[0_6px_0_var(--color-ink)] sm:p-9" data-delay="2">
+          <span class="absolute -top-7 left-6 font-display text-8xl font-extrabold leading-none text-ink" aria-hidden="true">“</span>
+          <blockquote class="font-display text-2xl font-bold leading-snug sm:text-3xl">
+            My goal is to bring beauty, joy, and a touch of magic to the world.
+          </blockquote>
+          <figcaption class="eyebrow mt-5 text-ink/70">Brenda Pokorny</figcaption>
+        </figure>
+
+        <ul class="reveal mt-8 space-y-3" data-delay="3">
+          {[
+            { href: 'https://www.brendapokornymosaics.com/', label: 'See her mosaic work', note: 'brendapokornymosaics.com' },
+            { href: 'https://www.getlostmazes.com', label: 'Explore Get Lost Mazes', note: 'getlostmazes.com' },
+            { href: 'https://www.charlottemagazine.com/inside-the-home-of-a-mosaic-artist/', label: 'Read the Charlotte Magazine feature', note: 'Inside the home of a mosaic artist' },
+          ].map((l) => (
+            <li>
+              <a href={l.href} target="_blank" rel="noopener" class="group flex items-center justify-between gap-4 rounded-2xl border-2 border-ink/10 bg-white px-5 py-4 transition hover:border-ink">
+                <span>
+                  <span class="block font-display font-semibold">{l.label}</span>
+                  <span class="block text-sm text-ink-soft">{l.note}</span>
+                </span>
+                <span class="grid size-9 shrink-0 place-items-center rounded-full bg-lime-soft transition group-hover:bg-lime">
+                  <Icon name="arrow" class="size-4 -rotate-45" />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Her path, told as a winding trail -->
+      <ol class="relative">
+        <span class="absolute bottom-6 left-[1.4rem] top-6 w-1 rounded-full bg-[repeating-linear-gradient(to_bottom,var(--color-lime-deep)_0_10px,transparent_10px_18px)]" aria-hidden="true"></span>
+        {[
+          { tag: 'Where it started', title: 'Textile designer', icon: 'heart',
+            body: 'Brenda earned a Bachelor of Fine Arts from Miami University with a concentration in textile design, and began her career in textiles. She spent 10 years managing her own textile design business.' },
+          { tag: 'Finding her calling', title: 'Mosaic artist', icon: 'diamond',
+            body: 'Then she started playing around with mosaic, and instantly knew she had found her calling. Her mosaics range from framed art to architectural installations to functional pieces such as garden benches and tables.' },
+          { tag: 'What inspires her', title: 'Gardens, nature & travel', icon: 'paw',
+            body: 'Her work is influenced by the ancient mosaics she has seen and the breathtaking scenery she has stumbled upon around the world.' },
+          { tag: 'Lately', title: 'Mandalas & labyrinths', icon: 'bone',
+            body: 'Recently she has been exploring mandalas and labyrinths in mosaic, borrowing from the hedge mazes and labyrinths she has visited, as well as her interest in meditation.' },
+          { tag: 'Step inside', title: 'Get Lost Mazes', icon: 'arrow',
+            body: 'Immersive 360° interactive art experiences based on her mazes and labyrinths. Projected large-scale onto the floor, the labyrinths invite you to step into another world while the walls and ceiling swirl and change with each scene. Meant for all ages and all abilities, she hopes to stage them in venues around the country.' },
+          { tag: 'And now', title: 'Dog Park: A Get Lost! Game', icon: 'check', highlight: true,
+            body: 'Her love of labyrinths and her life-long love of dogs come together on one game board, where many of the best friends who inspired it are whimsically represented.' },
+        ].map((s, i) => (
+          <li class="reveal relative pb-10 pl-16 last:pb-0" data-delay={String((i % 3) + 1)}>
+            <span class:list={['absolute left-0 top-1 grid size-12 place-items-center rounded-2xl border-2 border-ink shadow-[0_3px_0_var(--color-ink)]', s.highlight ? 'bg-token-red text-cream' : 'bg-cream']}>
+              <Icon name={s.icon} class="size-6" />
+            </span>
+            <div class:list={['rounded-3xl p-6', s.highlight ? 'border-2 border-ink bg-ink text-cream' : 'card']}>
+              <p class:list={['eyebrow text-[11px]', s.highlight ? 'text-lime' : 'text-lime-deep']}>{s.tag}</p>
+              <h3 class="mt-2 text-2xl font-bold">{s.title}</h3>
+              <p class:list={['mt-3 leading-relaxed', s.highlight ? 'text-cream/80' : 'text-ink-soft']}>{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Board feature -->
+  <section class="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+    <div class="grid items-center gap-12 rounded-[2rem] bg-ink p-6 text-cream sm:p-10 lg:grid-cols-2 lg:p-14">
+      <div class="reveal order-2 lg:order-1">
+        <p class="eyebrow text-lime">The board</p>
+        <h2 class="mt-4 text-3xl font-bold sm:text-5xl">Every path leads to TOP DOG.</h2>
+        <p class="mt-6 text-lg leading-relaxed text-cream/75">
+          Brenda’s love of labyrinths, laid out on a field of green, with a few detours for spa days, vet visits, and the
+          occasional stint in the dog house.
+        </p>
+        <a href="/how-to-play" class="btn btn-primary mt-8">Learn to play <Icon name="arrow" class="size-5" /></a>
+      </div>
+      <div class="reveal order-1 lg:order-2" data-delay="1">
+        <Image src={board} alt="The full Dog Park game board" width={1200} class="w-full rounded-2xl border-4 border-cream/10" />
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto grid max-w-7xl gap-5 px-4 sm:px-6 md:grid-cols-[0.8fr_1.2fr] lg:px-8">
+    <div class="reveal card overflow-hidden">
+      <Image src={drBens} alt="Dr. Ben's dog clinic illustration" width={800} class="aspect-square w-full object-cover md:h-full" />
+    </div>
+    <div class="reveal card overflow-hidden bg-[#3d3d3b]" data-delay="1">
+      <Image src={tokens} alt="Six colorful dog playing pieces" width={1400} class="h-full w-full object-contain" />
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-4 pt-20 text-center sm:px-6">
+    <p class="reveal eyebrow text-lime-deep">Based in</p>
+    <p class="reveal mt-3 font-display text-3xl font-bold sm:text-4xl" data-delay="1">Mooresville, North Carolina</p>
+    <p class="reveal mt-4 text-ink-soft" data-delay="2">Enjoyed by families everywhere.</p>
+  </section>
+</Layout>
