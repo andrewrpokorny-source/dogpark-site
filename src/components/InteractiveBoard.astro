@@ -92,7 +92,7 @@ const kindClass: Record<Kind, string> = {
       </div>
 
       <!-- Detail panel -->
-      <div class="card flex flex-col p-6 sm:p-8" aria-live="polite">
+      <div class="card flex flex-col self-start p-6 sm:p-8 lg:sticky lg:top-28" aria-live="polite">
         <div data-intro>
           <p class="eyebrow text-lime-deep">{spots.length} stops to discover</p>
           <h3 class="mt-3 text-2xl font-bold">Pick a spot on the board</h3>
@@ -139,6 +139,8 @@ const kindClass: Record<Kind, string> = {
     box-shadow: 0 0 0 6px rgb(180 203 118 / 0.45), 0 2px 0 var(--color-ink);
     z-index: 2;
   }
+  /* invisible 44px tap area around each pin (pins are only 28px on phones) */
+  .pin::before { content: ''; position: absolute; inset: -8px; border-radius: 9999px; }
   .pin:not([data-seen])::after {
     content: '';
     position: absolute;

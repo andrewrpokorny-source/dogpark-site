@@ -128,9 +128,6 @@ img.img-in { transition: opacity .6s ease, filter .7s ease, transform .7s ease; 
     background-size: auto, auto, cover;
     background-position: center;
   }
-  .lawn .eyebrow:is(.text-lime-deep) { color: var(--color-grass-dark); }
-  .lawn :is(.text-ink-soft) { color: var(--color-ink); }
-  .lawn .card :is(.text-ink-soft), .lawn .bg-white :is(.text-ink-soft) { color: var(--color-ink-soft); }
 
   .field {
     @apply w-full rounded-2xl border-2 border-ink/15 bg-white px-4 py-3 text-base text-ink
@@ -174,3 +171,9 @@ img.img-in { transition: opacity .6s ease, filter .7s ease, transform .7s ease; 
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .bob, .spin-slow, .marquee { animation: none; }
 }
+
+/* Text on the lawn: darker so it stays readable on the grass.
+   Unlayered on purpose so it wins over Tailwind's color utilities. */
+.lawn .eyebrow.text-lime-deep { color: var(--color-grass-dark); }
+.lawn .text-ink-soft { color: var(--color-ink); }
+.lawn :is(.card, .bg-white) .text-ink-soft { color: var(--color-ink-soft); }

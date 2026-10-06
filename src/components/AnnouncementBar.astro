@@ -2,15 +2,20 @@
 import { toyFair } from '../data/events';
 ---
 <div id="announce" class="relative z-[51] hidden bg-ink text-cream" data-end={toyFair.end}>
-  <div class="mx-auto flex max-w-7xl items-center justify-center gap-3 px-12 py-2.5 text-center text-sm">
+  <div class="mx-auto flex max-w-7xl items-center justify-center gap-3 px-11 py-2.5 text-center text-sm">
     <span class="hidden size-2 shrink-0 animate-pulse rounded-full bg-lime sm:inline-block" aria-hidden="true"></span>
-    <p>
+    <!-- phones: one short line -->
+    <p class="sm:hidden">
+      <span class="font-display font-semibold">{toyFair.name}{toyFair.booth && <> · Booth #{toyFair.booth}</>}</span>
+      <a href="/#toy-fair" class="ml-1 whitespace-nowrap font-semibold text-lime underline underline-offset-4">Details →</a>
+    </p>
+    <p class="hidden sm:block">
       <span class="font-display font-semibold">Visit Dog Park at {toyFair.name}{toyFair.booth && <>, Booth #{toyFair.booth}</>}</span>
       <span class="text-cream/70"> · {toyFair.dates}, New York.</span>
       <a href="/#toy-fair" class="ml-1 whitespace-nowrap font-semibold text-lime underline underline-offset-4 hover:text-cream">Details →</a>
     </p>
   </div>
-  <button type="button" data-dismiss class="absolute right-2 top-1/2 grid size-8 -translate-y-1/2 place-items-center rounded-full text-cream/60 hover:bg-cream/10 hover:text-cream" aria-label="Dismiss announcement">
+  <button type="button" data-dismiss class="absolute right-1 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full text-cream/60 hover:bg-cream/10 hover:text-cream" aria-label="Dismiss announcement">
     <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
   </button>
 </div>

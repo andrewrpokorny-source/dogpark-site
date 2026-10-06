@@ -123,15 +123,15 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
     </div>
     <div class="mt-14 grid gap-5 md:grid-cols-3">
       {goals.map((g, i) => (
-        <article class="reveal card group p-7 transition-transform duration-300 hover:-translate-y-1.5" data-delay={String(i + 1)}>
-          <div class:list={['grid size-20 place-items-center rounded-2xl transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-110', g.bg]}>
-            <Icon name={g.icon} class={`size-11 ${g.color}`} />
+        <article class="reveal card group grid grid-cols-[auto_1fr] items-center gap-x-4 p-5 transition-transform duration-300 hover:-translate-y-1.5 md:block md:p-7" data-delay={String(i + 1)}>
+          <div class:list={['row-span-2 grid size-16 place-items-center self-start rounded-2xl transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-110 md:size-20', g.bg]}>
+            <Icon name={g.icon} class={`size-9 md:size-11 ${g.color}`} />
           </div>
-          <div class="mt-6 flex items-baseline gap-3">
-            <span class="font-display text-6xl font-extrabold">5</span>
-            <h3 class="text-2xl font-bold">{g.name}</h3>
+          <div class="flex items-baseline gap-2.5 md:mt-6 md:gap-3">
+            <span class="font-display text-4xl font-extrabold md:text-6xl">5</span>
+            <h3 class="text-xl font-bold md:text-2xl">{g.name}</h3>
           </div>
-          <p class="mt-3 text-ink-soft">{g.blurb}</p>
+          <p class="mt-1 text-sm text-ink-soft md:mt-3 md:text-base">{g.blurb}</p>
         </article>
       ))}
     </div>

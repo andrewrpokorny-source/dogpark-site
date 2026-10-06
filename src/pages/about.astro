@@ -28,9 +28,9 @@ const facts = [
           throughout her life with her best friends, many of whom are whimsically represented in this game.
         </p>
         <p class="reveal mt-6 font-display text-2xl font-bold" data-delay="3">Enjoy tail-wagging fun!</p>
-        <ul class="reveal mt-10 flex flex-wrap gap-3" data-delay="3">
+        <ul class="reveal mt-10 flex flex-wrap gap-2" data-delay="3">
           {facts.map((f) => (
-            <li class="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 font-display text-sm font-semibold">
+            <li class="flex items-center gap-1.5 whitespace-nowrap rounded-full border-2 border-ink bg-white px-3 py-1.5 font-display text-[13px] font-semibold">
               <Icon name={f.icon} class="size-4 text-lime-deep" /> {f.label}
             </li>
           ))}

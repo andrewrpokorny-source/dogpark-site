@@ -16,18 +16,20 @@ import Icon from './Icon.astro';
     </div>
     <div>
       <h3 class="eyebrow mb-4 text-cream/50">Explore</h3>
-      <ul class="space-y-2.5 font-display">
-        <li><a class="hover:text-lime" href="/how-to-play">How to Play</a></li>
-        <li><a class="hover:text-lime" href="/products-store">Store</a></li>
-        <li><a class="hover:text-lime" href="/about">About</a></li>
-        <li><a class="hover:text-lime" href="/notify-me">Notify Me</a></li>
+      <ul class="-my-2 grid grid-cols-2 gap-x-6 font-display">
+        {[
+          ['/how-to-play', 'How to Play'], ['/play', 'Play'], ['/products-store', 'Store'],
+          ['/about', 'About'], ['/contact', 'Contact'], ['/notify-me', 'Notify Me'],
+        ].map(([href, label]) => (
+          <li><a class="inline-flex min-h-11 items-center hover:text-lime" href={href}>{label}</a></li>
+        ))}
       </ul>
     </div>
     <div>
       <h3 class="eyebrow mb-4 text-cream/50">Say hi</h3>
-      <ul class="space-y-3 text-cream/80">
-        <li class="flex items-center gap-3"><Icon name="mail" class="size-5 text-lime" /><a class="hover:text-lime" href="mailto:help@dogparkgames.com">help@dogparkgames.com</a></li>
-        <li class="flex items-center gap-3"><Icon name="pin" class="size-5 text-lime" />Mooresville, North Carolina</li>
+      <ul class="-my-2 text-cream/80">
+        <li class="flex min-h-11 items-center gap-3"><Icon name="mail" class="size-5 text-lime" /><a class="inline-flex min-h-11 items-center hover:text-lime" href="mailto:help@dogparkgames.com">help@dogparkgames.com</a></li>
+        <li class="flex min-h-11 items-center gap-3"><Icon name="pin" class="size-5 text-lime" />Mooresville, North Carolina</li>
       </ul>
     </div>
   </div>
