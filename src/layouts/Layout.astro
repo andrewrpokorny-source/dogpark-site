@@ -70,6 +70,10 @@ const ogImage = new URL('/og.jpg', Astro.site);
 
     <script>
       import { cartCount } from '../lib/cart';
+      import { loadKlaviyo } from '../lib/klaviyo';
+
+      // Klaviyo onsite tracking: page activity, and recognizing people who click through from emails
+      loadKlaviyo();
 
       const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
 

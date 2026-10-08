@@ -36,6 +36,7 @@ import parkSign from '../assets/dog-park-sign.webp';
               Also tell me about new merch and expansion packs.
             </label>
             <button class="btn btn-dark sm:col-span-2" type="submit">Add me to the list <Icon name="paw" class="size-5" /></button>
+            <p data-send-error role="alert" class="hidden text-sm font-semibold text-token-red sm:col-span-2">We couldn’t add you just now. Please try again in a minute, or email help@dogparkgames.com.</p>
           </div>
 
           <div data-success class="hidden py-6 text-center">
@@ -60,8 +61,13 @@ import parkSign from '../assets/dog-park-sign.webp';
 </Layout>
 
 <script>
+  import { subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+
   const form = document.getElementById('notify-form') as HTMLFormElement;
-  form.addEventListener('submit', (e) => {
+  const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const sendErr = form.querySelector('[data-send-error]')!;
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = form.querySelector<HTMLInputElement>('#email')!;
     const err = form.querySelector('[data-error]')!;
@@ -71,6 +77,28 @@ import parkSign from '../assets/dog-park-sign.webp';
       return;
     }
     err.classList.add('hidden');
+    sendErr.classList.add('hidden');
+
+    const merch = form.querySelector<HTMLInputElement>('input[name="merch"]')!.checked;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const ok = await subscribe(
+      {
+        email: email.value.trim(),
+        firstName: form.querySelector<HTMLInputElement>('#first')!.value.trim(),
+        lastName: form.querySelector<HTMLInputElement>('#last')!.value.trim(),
+      },
+      merch ? [KLAVIYO_LISTS.launch, KLAVIYO_LISTS.merch] : [KLAVIYO_LISTS.launch],
+      'Notify Me page',
+      { 'Wants merch updates': merch },
+    );
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+
+    if (!ok) {
+      sendErr.classList.remove('hidden');
+      return;
+    }
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });

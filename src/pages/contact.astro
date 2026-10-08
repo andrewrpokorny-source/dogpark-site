@@ -80,6 +80,8 @@ import dogHouse from '../assets/dog-house.webp';
 </Layout>
 
 <script>
+  import { identify, track } from '../lib/klaviyo';
+
   const form = document.getElementById('contact-form') as HTMLFormElement;
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -88,6 +90,16 @@ import dogHouse from '../assets/dog-house.webp';
     const ok = email.value && email.checkValidity() && msg.value.trim();
     form.querySelector('[data-error]')!.classList.toggle('hidden', !!ok);
     if (!ok) return;
+    // Record the message in Klaviyo (no marketing consent is given by contacting us)
+    identify({
+      email: email.value.trim(),
+      firstName: form.querySelector<HTMLInputElement>('#c-first')!.value.trim(),
+      lastName: form.querySelector<HTMLInputElement>('#c-last')!.value.trim(),
+    });
+    track('Submitted Contact Form', {
+      Topic: form.querySelector<HTMLSelectElement>('#c-topic')!.value,
+      Message: msg.value.trim().slice(0, 2000),
+    });
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });

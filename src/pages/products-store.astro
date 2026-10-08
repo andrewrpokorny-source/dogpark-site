@@ -82,7 +82,8 @@ const optionImages = await Promise.all(
 </Layout>
 
 <script>
-  import { addToCart, toast } from '../lib/cart';
+  import { addToCart, readCart, toast } from '../lib/cart';
+  import { track } from '../lib/klaviyo';
 
   document.querySelectorAll<HTMLElement>('[data-product]').forEach((card) => {
     const slides = card.querySelectorAll<HTMLElement>('[data-slide]');
@@ -129,6 +130,53 @@ const optionImages = await Promise.all(
         image: card.dataset.thumb!,
       });
       toast(`${card.dataset.name} (${option}) added to cart`);
+      trackAddedToCart(card, option);
     });
   });
+
+  // ---------- Klaviyo shopping events ----------
+  const abs = (path?: string) => (path ? new URL(path, location.origin).href : undefined);
+
+  // The game itself is featured at the top of the store
+  track('Viewed Product', {
+    ProductName: 'Dog Park: A Get Lost! Game',
+    ProductID: 'dog-park-game',
+    URL: location.href,
+  });
+
+  // Each merch item counts as viewed once it scrolls into view
+  const seen = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const card = e.target as HTMLElement;
+        seen.unobserve(card);
+        track('Viewed Product', {
+          ProductName: card.dataset.name,
+          ProductID: card.dataset.product,
+          Price: Number(card.dataset.price),
+          ImageURL: abs(card.dataset.thumb),
+          URL: location.href,
+        });
+      }),
+    { threshold: 0.4 },
+  );
+  document.querySelectorAll<HTMLElement>('[data-product]').forEach((c) => seen.observe(c));
+
+  function trackAddedToCart(card: HTMLElement, option: string) {
+    const items = readCart();
+    const value = items.reduce((n, i) => n + i.price * i.qty, 0);
+    track('Added to Cart', {
+      $value: value,
+      AddedItemProductName: card.dataset.name,
+      AddedItemProductID: card.dataset.product,
+      AddedItemVariant: option,
+      AddedItemPrice: Number(card.dataset.price),
+      AddedItemQuantity: 1,
+      AddedItemImageURL: abs(card.dataset.thumb),
+      ItemNames: items.map((i) => i.name),
+      Items: items.map((i) => ({ ProductID: i.id, ProductName: i.name, Variant: i.option, Quantity: i.qty, ItemPrice: i.price, RowTotal: i.price * i.qty, ImageURL: abs(i.image) })),
+      CheckoutURL: abs('/cart'),
+    });
+  }
 </script>

@@ -33,6 +33,7 @@ import Icon from '../components/Icon.astro';
 
 <script>
   import { readCart, writeCart, toast } from '../lib/cart';
+  import { track } from '../lib/klaviyo';
 
   const list = document.getElementById('cart-items')!;
   const fmt = (n: number) => `$${n.toFixed(2)}`;
@@ -83,6 +84,19 @@ import Icon from '../components/Icon.astro';
     render();
   });
 
-  document.getElementById('checkout')!.addEventListener('click', () => toast('Checkout opens with pre-orders in mid-November!'));
+  document.getElementById('checkout')!.addEventListener('click', () => {
+    const items = readCart();
+    if (items.length) {
+      const abs = (p: string) => new URL(p, location.origin).href;
+      track('Started Checkout', {
+        $event_id: `checkout-${Date.now()}`,
+        $value: items.reduce((n, i) => n + i.price * i.qty, 0),
+        ItemNames: items.map((i) => i.name),
+        Items: items.map((i) => ({ ProductID: i.id, ProductName: i.name, Variant: i.option, Quantity: i.qty, ItemPrice: i.price, RowTotal: i.price * i.qty, ImageURL: abs(i.image) })),
+        CheckoutURL: abs('/cart'),
+      });
+    }
+    toast('Checkout opens with pre-orders in mid-November!');
+  });
   render();
 </script>
