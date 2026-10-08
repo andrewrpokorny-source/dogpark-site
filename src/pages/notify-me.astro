@@ -62,6 +62,7 @@ import parkSign from '../assets/dog-park-sign.webp';
 
 <script>
   import { subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+  import { markJoined } from '../lib/signup-popup';
 
   const form = document.getElementById('notify-form') as HTMLFormElement;
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
@@ -99,6 +100,7 @@ import parkSign from '../assets/dog-park-sign.webp';
       sendErr.classList.remove('hidden');
       return;
     }
+    markJoined();
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });

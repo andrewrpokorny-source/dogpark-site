@@ -1,0 +1,158 @@
+---
+// Launch-list sign-up pop-up. Opens once per visit after real interest (scroll, time on page, or
+// exit intent), never for people already on the list, and stays away for a while after "No thanks".
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import parkSign from '../assets/dog-park-sign.webp';
+---
+<dialog
+  id="signup-popup"
+  tabindex="-1"
+  aria-labelledby="signup-popup-title"
+  class="m-auto w-[min(100%-2rem,30rem)] max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-[1.75rem] border-4 border-ink bg-cream p-0 text-ink shadow-[0_10px_0_var(--color-ink)] backdrop:bg-ink/60 backdrop:backdrop-blur-[2px]"
+>
+  <div class="relative">
+    <div class="h-28 overflow-hidden border-b-4 border-ink sm:h-44">
+      <Image src={parkSign} alt="" width={720} class="size-full object-cover object-[50%_62%]" />
+    </div>
+    <button type="button" data-close class="absolute right-3 top-3 grid size-11 place-items-center rounded-full border-2 border-ink bg-cream transition hover:bg-butter" aria-label="Close">
+      <Icon name="close" class="size-5" />
+    </button>
+    <p class="absolute bottom-0 left-5 translate-y-1/2 rotate-[-3deg] rounded-xl border-2 border-ink bg-butter px-3 py-1.5 eyebrow text-[10px] shadow-[0_3px_0_var(--color-ink)]">Pre-orders open mid-November</p>
+  </div>
+
+  <form method="dialog" data-popup-form class="px-6 pb-6 pt-8 sm:px-8 sm:pb-7 sm:pt-9" novalidate>
+    <div data-form-body>
+      <h2 id="signup-popup-title" class="text-3xl font-extrabold leading-tight sm:text-4xl">Don’t miss launch day.</h2>
+      <p class="mt-3 leading-relaxed text-ink-soft">
+        Join the list and we’ll email you the moment Dog Park is ready to order, plus first word on new merch and expansion packs.
+      </p>
+      <div class="mt-5 grid gap-3 sm:mt-6 sm:gap-4">
+        <div>
+          <label class="label" for="popup-first">First name</label>
+          <input class="field" id="popup-first" name="first" autocomplete="given-name" placeholder="Brenda" />
+        </div>
+        <div>
+          <label class="label" for="popup-email">Email <span class="text-token-red">*</span></label>
+          <input class="field" id="popup-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+        </div>
+        <label class="flex items-start gap-3 text-sm text-ink-soft">
+          <input type="checkbox" name="merch" checked class="mt-0.5 size-5 shrink-0 accent-lime-deep" />
+          Also tell me about new merch and expansion packs.
+        </label>
+        <p data-error role="alert" class="hidden text-sm font-semibold text-token-red"></p>
+        <button class="btn btn-dark w-full" type="submit">Add me to the list <Icon name="paw" class="size-5" /></button>
+        <button type="button" data-close class="mx-auto min-h-11 px-3 text-sm text-ink-soft underline underline-offset-4 hover:text-ink">No thanks</button>
+      </div>
+      <p class="mt-2 text-center text-xs text-ink-soft">No spam. Just bones. Unsubscribe anytime.</p>
+    </div>
+
+    <div data-success class="hidden py-4 text-center">
+      <div class="mx-auto grid size-20 place-items-center rounded-full bg-lime"><Icon name="paw" class="size-10 -rotate-12" /></div>
+      <h2 class="mt-5 text-3xl font-bold">You’re on the list!</h2>
+      <p class="mt-2 text-ink-soft">Good dog. We’ll be in touch the moment pre-orders open.</p>
+      <button type="button" data-close class="btn btn-dark mt-6">Back to the park</button>
+    </div>
+  </form>
+</dialog>
+
+<style>
+  dialog:focus, dialog:focus-visible { outline: none; }
+  dialog[open] { animation: popup-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+  dialog[open]::backdrop { animation: fade-in 0.3s ease-out; }
+  @keyframes popup-in { from { opacity: 0; transform: translateY(24px) scale(0.96); } }
+  @keyframes fade-in { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open], dialog[open]::backdrop { animation: none; }
+  }
+</style>
+
+<script>
+  import { subscribe, track, KLAVIYO_LISTS } from '../lib/klaviyo';
+  import { popupState, markJoined, markDismissed, SKIP_PATHS } from '../lib/signup-popup';
+
+  const dialog = document.getElementById('signup-popup') as HTMLDialogElement;
+  const form = dialog.querySelector<HTMLFormElement>('[data-popup-form]')!;
+  const err = form.querySelector<HTMLElement>('[data-error]')!;
+  const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const path = location.pathname.replace(/\/$/, '') || '/';
+  const fromEmail = /(^|[?&])(utm_source=klaviyo|_kx=)/.test(location.search);
+  if (fromEmail) markJoined(); // people clicking through from our emails are already subscribers
+
+  let shown = false;
+  let joined = false;
+
+  const open = () => {
+    if (shown || dialog.open || document.querySelector('dialog[open]')) return;
+    shown = true;
+    try { sessionStorage.setItem('dp-popup-seen', '1'); } catch {}
+    dialog.showModal();
+    dialog.focus(); // start focus on the dialog itself, not the close button or (on phones) a keyboard-opening field
+    track('Viewed Signup Popup', { Page: path });
+    cleanup();
+  };
+
+  const close = () => {
+    if (!joined) markDismissed();
+    dialog.close();
+  };
+  dialog.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', close));
+  dialog.addEventListener('cancel', () => { if (!joined) markDismissed(); }); // Esc key
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) close(); }); // click on backdrop
+
+  // ----- Triggers -----
+  let timer: number | undefined;
+  const onScroll = () => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    if (max > 400 && scrollY / max > 0.45) open();
+  };
+  const onLeave = (e: MouseEvent) => { if (e.clientY <= 0 && !e.relatedTarget) open(); };
+  const cleanup = () => {
+    clearTimeout(timer);
+    removeEventListener('scroll', onScroll);
+    document.removeEventListener('mouseout', onLeave);
+  };
+
+  let seenThisVisit = false;
+  try { seenThisVisit = sessionStorage.getItem('dp-popup-seen') === '1'; } catch {}
+
+  if (!SKIP_PATHS.some((p) => path === p || path.startsWith(`${p}/`)) && popupState() === 'eligible' && !seenThisVisit) {
+    timer = window.setTimeout(open, 25_000);
+    addEventListener('scroll', onScroll, { passive: true });
+    if (matchMedia('(pointer: fine)').matches) document.addEventListener('mouseout', onLeave);
+  }
+
+  // ----- Submit -----
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.add('hidden');
+    const email = form.querySelector<HTMLInputElement>('#popup-email')!;
+    if (!email.value || !email.checkValidity()) {
+      err.textContent = 'Please enter a valid email so we can reach you.';
+      err.classList.remove('hidden');
+      email.focus();
+      return;
+    }
+    const merch = form.querySelector<HTMLInputElement>('input[name="merch"]')!.checked;
+    submit.disabled = true;
+    submit.setAttribute('aria-busy', 'true');
+    const ok = await subscribe(
+      { email: email.value.trim(), firstName: form.querySelector<HTMLInputElement>('#popup-first')!.value.trim() },
+      merch ? [KLAVIYO_LISTS.launch, KLAVIYO_LISTS.merch] : [KLAVIYO_LISTS.launch],
+      'Site pop-up',
+      { 'Wants merch updates': merch, 'Signed up on page': path },
+    );
+    submit.disabled = false;
+    submit.removeAttribute('aria-busy');
+    if (!ok) {
+      err.textContent = 'We couldn’t add you just now. Please try again in a minute.';
+      err.classList.remove('hidden');
+      return;
+    }
+    joined = true;
+    markJoined();
+    form.querySelector('[data-form-body]')!.classList.add('hidden');
+    form.querySelector('[data-success]')!.classList.remove('hidden');
+    form.querySelector<HTMLButtonElement>('[data-success] [data-close]')!.focus();
+  });
+</script>
