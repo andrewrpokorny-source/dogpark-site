@@ -1,0 +1,187 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import ToyFair from '../components/ToyFair.astro';
+import { toyFair } from '../data/events';
+
+// One checkbox per show day, e.g. "Sat, Feb 20"
+const showDays: { value: string; label: string }[] = [];
+for (let d = new Date(`${toyFair.start}T12:00:00Z`); d <= new Date(`${toyFair.end}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + 1)) {
+  showDays.push({
+    value: d.toISOString().slice(0, 10),
+    label: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' }),
+  });
+}
+const select = 'field appearance-none pr-12';
+const chevron = '<svg class="pointer-events-none absolute right-4 top-1/2 size-5 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+---
+<Layout
+  title={toyFair.name}
+  description={`Meet Dog Park at ${toyFair.name}, ${toyFair.dates}, ${toyFair.venue}${toyFair.booth ? `, Booth #${toyFair.booth}` : ''}. Retailers, buyers and press can request a meeting with Brenda.`}
+>
+  <div class="pt-10 md:pt-16">
+    <ToyFair />
+  </div>
+
+  <section id="request" class="scroll-mt-24 mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
+    <div>
+      <p class="reveal eyebrow text-lime-deep">Retailers · Buyers · Press</p>
+      <h2 class="reveal mt-4 text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-[1.05]" data-delay="1">Request a meeting with Brenda.</h2>
+      <p class="reveal mt-6 max-w-md text-lg leading-relaxed text-ink-soft" data-delay="2">
+        Tell us when you’ll be at the Javits Center and we’ll set aside time at Booth #{toyFair.booth} to walk you through
+        the game, wholesale terms, and what’s coming next. Brenda will email you to confirm a time.
+      </p>
+      <ul class="reveal mt-8 space-y-3 text-ink-soft" data-delay="3">
+        <li class="flex gap-3"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-lime-deep" />Play a full round on the real board</li>
+        <li class="flex gap-3"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-lime-deep" />Wholesale pricing and minimums</li>
+        <li class="flex gap-3"><Icon name="check" class="mt-0.5 size-5 shrink-0 text-lime-deep" />Press kit and artwork for coverage</li>
+      </ul>
+    </div>
+
+    <form id="meeting-form" class="reveal card h-fit p-6 sm:p-10" data-delay="2" novalidate>
+      <div data-form-body class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label class="label" for="m-first">First name <span class="text-token-red">*</span></label>
+          <input class="field" id="m-first" name="first" autocomplete="given-name" required />
+        </div>
+        <div>
+          <label class="label" for="m-last">Last name <span class="text-token-red">*</span></label>
+          <input class="field" id="m-last" name="last" autocomplete="family-name" required />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label" for="m-email">Work email <span class="text-token-red">*</span></label>
+          <input class="field" id="m-email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div>
+          <label class="label" for="m-company">Company or store <span class="text-token-red">*</span></label>
+          <input class="field" id="m-company" name="company" autocomplete="organization" required />
+        </div>
+        <div>
+          <label class="label" for="m-role">You are a…</label>
+          <div class="relative"><select class={select} id="m-role" name="role">
+            <option>Retail buyer or store owner</option>
+            <option>Distributor or sales rep</option>
+            <option>Press or media</option>
+            <option>Content creator</option>
+            <option>Something else</option>
+          </select><Fragment set:html={chevron} /></div>
+        </div>
+        <div>
+          <label class="label" for="m-location">City and state</label>
+          <input class="field" id="m-location" name="location" autocomplete="address-level2" placeholder="Charlotte, NC" />
+        </div>
+        <div>
+          <label class="label" for="m-phone">Phone</label>
+          <input class="field" id="m-phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+
+        <fieldset class="sm:col-span-2">
+          <legend class="label">Which days will you be at the show? <span class="text-token-red">*</span></legend>
+          <div class="mt-1 flex flex-wrap gap-2">
+            {showDays.map((d) => (
+              <label class="cursor-pointer">
+                <input type="checkbox" name="days" value={d.label} class="peer sr-only" />
+                <span class="inline-block rounded-full border-2 border-ink/15 bg-white px-4 py-2.5 font-display text-sm font-semibold transition peer-checked:border-ink peer-checked:bg-ink peer-checked:text-cream peer-focus-visible:ring-2 peer-focus-visible:ring-lime-deep hover:border-ink">{d.label}</span>
+              </label>
+            ))}
+            <label class="cursor-pointer">
+              <input type="checkbox" name="days" value="Not sure yet" class="peer sr-only" />
+              <span class="inline-block rounded-full border-2 border-ink/15 bg-white px-4 py-2.5 font-display text-sm font-semibold transition peer-checked:border-ink peer-checked:bg-ink peer-checked:text-cream peer-focus-visible:ring-2 peer-focus-visible:ring-lime-deep hover:border-ink">Not sure yet</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="sm:col-span-2">
+          <label class="label" for="m-time">Best time of day</label>
+          <div class="relative"><select class={select} id="m-time" name="time">
+            <option>Flexible</option>
+            <option>Morning</option>
+            <option>Midday</option>
+            <option>Afternoon</option>
+          </select><Fragment set:html={chevron} /></div>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label" for="m-notes">Anything we should know?</label>
+          <textarea class="field min-h-28 resize-y" id="m-notes" name="notes" placeholder="Number of stores, what you carry, coverage you’re planning…"></textarea>
+        </div>
+        <label class="flex items-start gap-3 text-sm text-ink-soft sm:col-span-2">
+          <input type="checkbox" name="updates" class="mt-0.5 size-5 shrink-0 accent-lime-deep" />
+          Also send me Dog Park trade and press updates (new releases, wholesale news).
+        </label>
+
+        <p data-error role="alert" class="hidden text-sm font-semibold text-token-red sm:col-span-2"></p>
+        <button class="btn btn-dark sm:col-span-2" type="submit">Request a meeting <Icon name="arrow" class="size-5" /></button>
+      </div>
+
+      <div data-success class="hidden py-10 text-center">
+        <div class="mx-auto grid size-20 place-items-center rounded-full bg-lime"><Icon name="check" class="size-10" /></div>
+        <h2 class="mt-6 text-3xl font-bold">Request received!</h2>
+        <p class="mx-auto mt-3 max-w-sm text-ink-soft">Thanks. Brenda will email you to confirm a time. See you at Booth #{toyFair.booth}.</p>
+      </div>
+    </form>
+  </section>
+</Layout>
+
+<script>
+  import { sendEvent, subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+
+  const form = document.getElementById('meeting-form') as HTMLFormElement;
+  const err = form.querySelector<HTMLElement>('[data-error]')!;
+  const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const val = (id: string) => (form.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(`#${id}`)!.value || '').trim();
+
+  const fail = (msg: string, focus?: string) => {
+    err.textContent = msg;
+    err.classList.remove('hidden');
+    if (focus) form.querySelector<HTMLElement>(`#${focus}`)?.focus();
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.add('hidden');
+
+    const email = form.querySelector<HTMLInputElement>('#m-email')!;
+    const days = [...form.querySelectorAll<HTMLInputElement>('input[name="days"]:checked')].map((c) => c.value);
+    if (!val('m-first') || !val('m-last')) return fail('Please add your first and last name.', val('m-first') ? 'm-last' : 'm-first');
+    if (!email.value || !email.checkValidity()) return fail('Please enter a valid work email so we can confirm your meeting.', 'm-email');
+    if (!val('m-company')) return fail('Please tell us your company or store.', 'm-company');
+    if (!days.length) return fail('Please pick the days you’ll be at the show, or “Not sure yet.”');
+
+    const person = {
+      email: email.value.trim(),
+      firstName: val('m-first'),
+      lastName: val('m-last'),
+      organization: val('m-company'),
+      title: val('m-role'),
+    };
+
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const ok = await sendEvent(
+      'Requested Toy Fair Meeting',
+      person,
+      {
+        Event: 'Toy Fair 2027',
+        Company: person.organization,
+        Role: person.title,
+        Location: val('m-location'),
+        Phone: val('m-phone'),
+        'Preferred days': days,
+        'Preferred days text': days.join(', '),
+        'Preferred time': val('m-time'),
+        Notes: val('m-notes').slice(0, 2000),
+        'Wants trade updates': form.querySelector<HTMLInputElement>('input[name="updates"]')!.checked,
+      },
+      { 'Contact type': 'Trade', 'Toy Fair 2027 meeting requested': true },
+    );
+    if (ok && form.querySelector<HTMLInputElement>('input[name="updates"]')!.checked) {
+      await subscribe(person, [KLAVIYO_LISTS.trade], 'Toy Fair meeting form', { 'Contact type': 'Trade' });
+    }
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+
+    if (!ok) return fail('We couldn’t send your request just now. Please try again in a minute, or email help@dogparkgames.com.');
+    form.querySelector('[data-form-body]')!.classList.add('hidden');
+    form.querySelector('[data-success]')!.classList.remove('hidden');
+  });
+</script>

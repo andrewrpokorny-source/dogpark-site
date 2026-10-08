@@ -7,12 +7,12 @@ import { toyFair } from '../data/events';
     <!-- phones: one short line -->
     <p class="sm:hidden">
       <span class="font-display font-semibold">{toyFair.name}{toyFair.booth && <> · Booth #{toyFair.booth}</>}</span>
-      <a href="/#toy-fair" class="ml-1 whitespace-nowrap font-semibold text-lime underline underline-offset-4">Details →</a>
+      <a href="/toy-fair" class="ml-1 whitespace-nowrap font-semibold text-lime underline underline-offset-4">Details →</a>
     </p>
     <p class="hidden sm:block">
       <span class="font-display font-semibold">Visit Dog Park at {toyFair.name}{toyFair.booth && <>, Booth #{toyFair.booth}</>}</span>
       <span class="text-cream/70"> · {toyFair.dates}, New York.</span>
-      <a href="/#toy-fair" class="ml-1 whitespace-nowrap font-semibold text-lime underline underline-offset-4 hover:text-cream">Details →</a>
+      <a href="/toy-fair" class="ml-1 whitespace-nowrap font-semibold text-lime underline underline-offset-4 hover:text-cream">Details →</a>
     </p>
   </div>
   <button type="button" data-dismiss class="absolute right-1 top-1/2 grid size-10 -translate-y-1/2 place-items-center rounded-full text-cream/60 hover:bg-cream/10 hover:text-cream" aria-label="Dismiss announcement">

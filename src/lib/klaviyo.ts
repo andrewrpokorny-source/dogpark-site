@@ -5,6 +5,7 @@ export const KLAVIYO_SITE_KEY = 'RPbPt8';
 export const KLAVIYO_LISTS = {
   launch: 'RSw5FP', // Dog Park Launch List
   merch: 'RxZ4if', // Dog Park Merch & Expansions
+  trade: 'SWXpTK', // Trade & Press Updates (retailers, buyers, press; never consumer email)
 } as const;
 const API_REVISION = '2026-07-15';
 
@@ -71,6 +72,54 @@ export function identify(p: Person, properties: Record<string, unknown> = {}) {
 /** Record an event (Viewed Product, Added to Cart, ...) for the current visitor. */
 export function track(event: string, properties: Record<string, unknown> = {}) {
   call('track', event, properties);
+}
+
+export interface TradeContact extends Person {
+  organization?: string;
+  title?: string;
+}
+
+/**
+ * Send an event straight to Klaviyo's client API and wait for the answer, for forms where
+ * the visitor must know their submission arrived. Does not subscribe anyone to marketing.
+ * Resolves true when Klaviyo accepted the event.
+ */
+export async function sendEvent(metric: string, p: TradeContact, properties: Record<string, unknown> = {}, profileProperties: Record<string, unknown> = {}) {
+  const ok = await fetch(`https://a.klaviyo.com/client/events?company_id=${KLAVIYO_SITE_KEY}`, {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/vnd.api+json',
+      accept: 'application/vnd.api+json',
+      revision: API_REVISION,
+    },
+    body: JSON.stringify({
+      data: {
+        type: 'event',
+        attributes: {
+          properties: clean(properties),
+          metric: { data: { type: 'metric', attributes: { name: metric } } },
+          profile: {
+            data: {
+              type: 'profile',
+              attributes: clean({
+                email: p.email,
+                first_name: p.firstName,
+                last_name: p.lastName,
+                organization: p.organization,
+                title: p.title,
+                properties: clean(profileProperties),
+              }),
+            },
+          },
+        },
+      },
+    }),
+  })
+    .then((r) => r.ok)
+    .catch(() => false);
+
+  if (ok) identify(p);
+  return ok;
 }
 
 /**
