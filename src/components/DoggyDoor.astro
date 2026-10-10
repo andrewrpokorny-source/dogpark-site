@@ -79,6 +79,9 @@ const loading = eager ? 'eager' : 'lazy';
   const doors = [...document.querySelectorAll<HTMLElement>('.doggy-door')];
   if (doors.length && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const state = doors.map(() => ({ p: -1, target: 0 }));
+    const anims = doors.map((el) =>
+      [...el.querySelectorAll<HTMLElement>('.dog, .flap')].flatMap((n) => n.getAnimations?.() ?? []),
+    );
     let raf = 0;
     const measure = () => {
       const vh = innerHeight;
@@ -95,7 +98,16 @@ const loading = eager ? 'eager' : 'lazy';
         const s = state[i];
         s.p += (s.target - s.p) * 0.18;
         if (Math.abs(s.target - s.p) > 0.0005) moving = true; else s.p = s.target;
-        el.style.setProperty('--p', s.p.toFixed(4));
+        if (anims[i].length) {
+          // Seek the animations directly. Safari doesn't always re-apply a changed animation-delay on a
+          // paused animation, but currentTime always works. Local time = currentTime - delay.
+          anims[i].forEach((a) => {
+            const delay = Number(a.effect?.getTiming().delay ?? 0);
+            a.currentTime = s.p * 1000 + delay;
+          });
+        } else {
+          el.style.setProperty('--p', s.p.toFixed(4)); // fallback: drive the CSS delay
+        }
       });
       if (moving) raf = requestAnimationFrame(tick);
     };
