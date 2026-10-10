@@ -1,0 +1,223 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import board from '../assets/game-board.webp';
+import { wholesale } from '../data/wholesale';
+import { toyFair } from '../data/events';
+
+const select = 'field appearance-none pr-12';
+const chevron = '<svg class="pointer-events-none absolute right-4 top-1/2 size-5 -translate-y-1/2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+const reasons = [
+  { icon: 'heart', title: 'Family-friendly, all ages', body: 'Easy to learn, quick to love. Kids and grown-ups play on the same board.' },
+  { icon: 'paw', title: 'Brenda’s original art', body: 'Every inch of the labyrinth is hand-painted by Brenda Pokorny, an artist from Mooresville, NC.' },
+  { icon: 'diamond', title: 'Built for dog lovers', body: 'A gift that sells itself to anyone who’s ever loved a pup, not just board-game fans.' },
+  { icon: 'check', title: 'Patent pending', body: 'An original game you won’t find on every other shelf.' },
+] as const;
+---
+<Layout title="Wholesale" description="Stock Dog Park: A Get Lost! Game in your shop. Wholesale for toy stores, game shops, bookstores and gift shops.">
+  <PageHero
+    eyebrow="For retailers"
+    title="Stock Dog Park in your shop."
+    lede="Dog Park: A Get Lost! Game is a family-friendly labyrinth board game, hand-painted by Brenda Pokorny. We’re opening wholesale accounts now for toy stores, game shops, bookstores and gift shops."
+  >
+    <div class="reveal mt-8 flex flex-col gap-3 sm:flex-row" data-delay="3">
+      {wholesale.faireUrl ? (
+        <a href={wholesale.faireUrl} target="_blank" rel="noopener" class="btn btn-dark">Shop wholesale on Faire <Icon name="arrow" class="size-5" /></a>
+      ) : (
+        <a href="#apply" class="btn btn-dark">Become a stockist <Icon name="arrow" class="size-5" /></a>
+      )}
+      <a href="/toy-fair" class="btn btn-ghost">Meet us at {toyFair.name}</a>
+    </div>
+  </PageHero>
+
+  <section class="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 sm:px-6 md:pb-24 lg:grid-cols-2 lg:px-8">
+    <div class="reveal relative">
+      <div class="absolute -inset-3 rotate-2 rounded-[2rem] bg-lime" aria-hidden="true"></div>
+      <Image src={board} alt="The Dog Park game board: a hand-painted labyrinth with TOP DOG at the center" width={1100} class="relative w-full rounded-[1.75rem] border-4 border-ink" />
+    </div>
+    <div>
+      <p class="reveal eyebrow text-lime-deep">Why shops carry it</p>
+      <h2 class="reveal mt-4 text-3xl font-bold sm:text-4xl" data-delay="1">A game people pick up and don’t put down.</h2>
+      <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+        {reasons.map((r, i) => (
+          <li class="reveal card p-5" data-delay={String(i + 1)}>
+            <span class="grid size-10 place-items-center rounded-xl bg-lime-soft"><Icon name={r.icon} class="size-5 text-ink" /></span>
+            <h3 class="mt-3 text-lg font-bold">{r.title}</h3>
+            <p class="mt-1 text-sm leading-relaxed text-ink-soft">{r.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- How to order -->
+  <section class="bg-ink text-cream">
+    <div class="mx-auto grid max-w-7xl gap-8 px-4 py-16 sm:px-6 md:grid-cols-3 md:py-20 lg:px-8">
+      <div class="md:col-span-1">
+        <p class="eyebrow text-lime">How to order</p>
+        <h2 class="mt-4 text-3xl font-bold sm:text-4xl">Two easy ways to stock up.</h2>
+      </div>
+      <div class="rounded-3xl border-2 border-cream/15 p-6 sm:p-8">
+        <p class="font-display text-sm font-bold text-lime">{wholesale.faireUrl ? 'Available now' : 'Coming soon'}</p>
+        <h3 class="mt-2 text-2xl font-bold">Order on Faire</h3>
+        <p class="mt-3 text-cream/75">Faire is the wholesale marketplace independent shops already use, with flexible payment terms for retailers.
+          {wholesale.faireUrl ? ' Ordering through our link gets you Faire’s perks on your first order.' : ' Join the stockist list and we’ll send you our Faire link the day we go live.'}</p>
+        {wholesale.faireUrl && <a href={wholesale.faireUrl} target="_blank" rel="noopener" class="btn btn-primary mt-6">Shop on Faire <Icon name="arrow" class="size-5" /></a>}
+      </div>
+      <div class="rounded-3xl border-2 border-cream/15 p-6 sm:p-8">
+        <p class="font-display text-sm font-bold text-lime">Larger or repeat orders</p>
+        <h3 class="mt-2 text-2xl font-bold">Order direct</h3>
+        <p class="mt-3 text-cream/75">Chains, distributors and repeat stockists can open a direct wholesale account. Tell us about your shop and we’ll send our wholesale terms.</p>
+        <a href="#apply" class="btn btn-primary mt-6">Become a stockist <Icon name="arrow" class="size-5" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stockist form -->
+  <section id="apply" class="scroll-mt-24 mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[0.8fr_1.2fr] lg:px-8">
+    <div>
+      <p class="reveal eyebrow text-lime-deep">Become a stockist</p>
+      <h2 class="reveal mt-4 text-[clamp(2rem,5vw,3.5rem)] font-extrabold leading-[1.05]" data-delay="1">Tell us about your shop.</h2>
+      <p class="reveal mt-6 max-w-md text-lg leading-relaxed text-ink-soft" data-delay="2">
+        We’ll reply with wholesale pricing, minimums and how to order. Pre-orders open mid-November.
+      </p>
+      <p class="reveal mt-6 max-w-md text-ink-soft" data-delay="3">
+        Questions first? Email <a href="mailto:help@dogparkgames.com" class="font-semibold text-ink underline decoration-lime decoration-2 underline-offset-4">help@dogparkgames.com</a>.
+      </p>
+    </div>
+
+    <form id="stockist-form" class="reveal card h-fit p-6 sm:p-10" data-delay="2" novalidate>
+      <div data-form-body class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label class="label" for="w-first">First name <span class="text-token-red">*</span></label>
+          <input class="field" id="w-first" name="first" autocomplete="given-name" required />
+        </div>
+        <div>
+          <label class="label" for="w-last">Last name <span class="text-token-red">*</span></label>
+          <input class="field" id="w-last" name="last" autocomplete="family-name" required />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label" for="w-email">Work email <span class="text-token-red">*</span></label>
+          <input class="field" id="w-email" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div>
+          <label class="label" for="w-store">Store or company <span class="text-token-red">*</span></label>
+          <input class="field" id="w-store" name="store" autocomplete="organization" required />
+        </div>
+        <div>
+          <label class="label" for="w-type">Type of business</label>
+          <div class="relative"><select class={select} id="w-type" name="type">
+            <option>Independent toy store</option>
+            <option>Game store</option>
+            <option>Bookstore</option>
+            <option>Gift or pet shop</option>
+            <option>Museum, zoo or park shop</option>
+            <option>Chain or department store</option>
+            <option>Online shop</option>
+            <option>Distributor or sales rep</option>
+            <option>Something else</option>
+          </select><Fragment set:html={chevron} /></div>
+        </div>
+        <div>
+          <label class="label" for="w-location">City and state</label>
+          <input class="field" id="w-location" name="location" autocomplete="address-level2" placeholder="Charlotte, NC" />
+        </div>
+        <div>
+          <label class="label" for="w-stores">Number of locations</label>
+          <div class="relative"><select class={select} id="w-stores" name="stores">
+            <option>1</option>
+            <option>2–5</option>
+            <option>6–20</option>
+            <option>21+</option>
+            <option>Online only</option>
+          </select><Fragment set:html={chevron} /></div>
+        </div>
+        <div>
+          <label class="label" for="w-website">Website or Instagram</label>
+          <input class="field" id="w-website" name="website" autocomplete="url" placeholder="yourshop.com" />
+        </div>
+        <div>
+          <label class="label" for="w-phone">Phone</label>
+          <input class="field" id="w-phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+        <div class="sm:col-span-2">
+          <label class="label" for="w-notes">Anything else?</label>
+          <textarea class="field min-h-28 resize-y" id="w-notes" name="notes" placeholder="What you carry, when you’d like to stock it, how you heard about us…"></textarea>
+        </div>
+        <label class="flex items-start gap-3 text-sm text-ink-soft sm:col-span-2">
+          <input type="checkbox" name="updates" class="mt-0.5 size-5 shrink-0 accent-lime-deep" />
+          Also send me Dog Park trade updates (new releases, wholesale news).
+        </label>
+
+        <p data-error role="alert" class="hidden text-sm font-semibold text-token-red sm:col-span-2"></p>
+        <button class="btn btn-dark sm:col-span-2" type="submit">Send my details <Icon name="arrow" class="size-5" /></button>
+      </div>
+
+      <div data-success class="hidden py-10 text-center">
+        <div class="mx-auto grid size-20 place-items-center rounded-full bg-lime"><Icon name="check" class="size-10" /></div>
+        <h2 class="mt-6 text-3xl font-bold">Thanks! We’ll be in touch.</h2>
+        <p class="mx-auto mt-3 max-w-sm text-ink-soft">We’ll email you our wholesale terms and how to order.</p>
+      </div>
+    </form>
+  </section>
+</Layout>
+
+<script>
+  import { sendEvent, subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+
+  const form = document.getElementById('stockist-form') as HTMLFormElement;
+  const err = form.querySelector<HTMLElement>('[data-error]')!;
+  const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  const val = (id: string) => (form.querySelector<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>(`#${id}`)!.value || '').trim();
+  const fail = (msg: string, focus?: string) => {
+    err.textContent = msg;
+    err.classList.remove('hidden');
+    if (focus) form.querySelector<HTMLElement>(`#${focus}`)?.focus();
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    err.classList.add('hidden');
+    const email = form.querySelector<HTMLInputElement>('#w-email')!;
+    if (!val('w-first') || !val('w-last')) return fail('Please add your first and last name.', val('w-first') ? 'w-last' : 'w-first');
+    if (!email.value || !email.checkValidity()) return fail('Please enter a valid work email so we can send our terms.', 'w-email');
+    if (!val('w-store')) return fail('Please tell us your store or company name.', 'w-store');
+
+    const updates = form.querySelector<HTMLInputElement>('input[name="updates"]')!.checked;
+    const person = {
+      email: email.value.trim(),
+      firstName: val('w-first'),
+      lastName: val('w-last'),
+      organization: val('w-store'),
+      title: val('w-type'),
+    };
+
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const ok = await sendEvent(
+      'Submitted Wholesale Inquiry',
+      person,
+      {
+        Store: person.organization,
+        'Business type': person.title,
+        Location: val('w-location'),
+        Locations: val('w-stores'),
+        Website: val('w-website'),
+        Phone: val('w-phone'),
+        Notes: val('w-notes').slice(0, 2000),
+        'Wants trade updates': updates,
+      },
+      { 'Contact type': 'Trade', 'Wholesale inquiry': true },
+    );
+    if (ok && updates) await subscribe(person, [KLAVIYO_LISTS.trade], 'Wholesale page', { 'Contact type': 'Trade' });
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+
+    if (!ok) return fail('We couldn’t send your details just now. Please try again in a minute, or email help@dogparkgames.com.');
+    form.querySelector('[data-form-body]')!.classList.add('hidden');
+    form.querySelector('[data-success]')!.classList.remove('hidden');
+  });
+</script>

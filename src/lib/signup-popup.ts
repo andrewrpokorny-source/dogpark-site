@@ -5,7 +5,7 @@ const KEY = 'dp-signup';
 const SNOOZE_DAYS = 14;
 
 /** Pages that already have their own form, where the pop-up would get in the way. */
-export const SKIP_PATHS = ['/notify-me', '/contact', '/toy-fair', '/cart'];
+export const SKIP_PATHS = ['/notify-me', '/contact', '/toy-fair', '/wholesale', '/cart'];
 
 export function popupState(): 'eligible' | 'joined' | 'snoozed' {
   try {
