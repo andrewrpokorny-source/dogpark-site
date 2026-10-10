@@ -1,7 +1,36 @@
 @import "tailwindcss";
-@import "@fontsource-variable/lexend";
-@import "@fontsource-variable/nunito-sans";
 @import "@fontsource/courier-prime/700.css";
+
+/* Brand font: Calibri (as in the Dog Park logo). Calibri can't be bundled, so visitors without it
+   get Carlito, an open-licensed (SIL OFL) font with the same shapes and spacing. */
+@font-face {
+  font-family: "Carlito Web";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/carlito-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Carlito Web";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/carlito-latin-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Carlito Web";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/carlito-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Carlito Web";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/carlito-latin-700-italic.woff2") format("woff2");
+}
 
 /* Palette sampled from Brenda's board art and logo */
 @theme {
@@ -22,8 +51,8 @@
   --color-terrier: #c8853a;
   --color-token-red: #e8432f;
 
-  --font-display: "Lexend Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Nunito Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: Calibri, "Carlito Web", Carlito, ui-sans-serif, system-ui, sans-serif;
+  --font-sans: Calibri, "Carlito Web", Carlito, ui-sans-serif, system-ui, sans-serif;
   --font-type: "Courier Prime", ui-monospace, monospace;
 
   --shadow-card: 0 1px 0 rgb(29 34 24 / 0.06), 0 12px 32px -12px rgb(29 34 24 / 0.22);
