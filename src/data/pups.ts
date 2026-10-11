@@ -23,7 +23,7 @@ export const pups: Pup[] = [
   { id: 'blue', color: 'Blue', breed: 'Bernedoodle', hex: '#00b3e3', image: blue, blurb: 'Fluffy ears, sweet face, and a polite little sit. Has never met a PUP CUP it didn’t like.' },
   { id: 'pink', color: 'Pink', breed: 'Dachshund', hex: '#e031ad', image: pink, blurb: 'Long body, longer memory. Remembers exactly who stole its bone.' },
   { id: 'red', color: 'Red', breed: 'German Shepherd', hex: '#da291c', image: red, blurb: 'Ears up, always on the lookout for a STEAL ONE BONE space.' },
-  { id: 'green', color: 'Green', breed: 'Catahoula', hex: '#78be20', image: green, blurb: 'One ear up, tail up, ready to wander. The labyrinth’s natural explorer.' },
+  { id: 'green', color: 'Green', breed: 'Catahoula', hex: '#78be20', image: green, blurb: 'Ears up, tail ready to wander. The labyrinth’s natural explorer.' },
   { id: 'orange', color: 'Orange', breed: 'Golden Retriever', hex: '#ff8200', image: orange, blurb: 'A Paw Spa regular. Diamonds are a pup’s best friend.' },
   { id: 'yellow', color: 'Yellow', breed: 'Yorkshire Terrier', hex: '#ffd100', image: yellow, blurb: 'Small, silky, and fearless. Zero turns in the Dog House. (Allegedly.)' },
 ];

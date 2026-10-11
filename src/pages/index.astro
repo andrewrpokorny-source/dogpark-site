@@ -107,7 +107,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
         <p class="eyebrow text-lime-deep">Come on in</p>
         <h2 id="welcome-title" class="mt-3 text-4xl font-bold sm:text-5xl">Sit. Stay. Get lost.</h2>
       </div>
-      <p class="max-w-sm text-ink-soft">Every great game starts at the gate. Grab a pup and head into the park.</p>
+      <p class="max-w-sm text-ink-soft">Every great game starts at the gate. Leash up a pup and head to the park.</p>
     </div>
     <div class="reveal" data-delay="1">
       <DogParkScene />
@@ -118,7 +118,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
   <section class="mx-auto max-w-7xl px-4 py-20 sm:px-6 md:py-28 lg:px-8">
     <div class="reveal mx-auto max-w-2xl text-center">
       <p class="eyebrow text-lime-deep">The object of the game</p>
-      <h2 class="mt-4 text-4xl font-bold sm:text-5xl">Five of each. First to the center wins.</h2>
+      <h2 class="mt-4 text-4xl font-bold sm:text-5xl"><span class="block">Five of each.</span> <span class="block">First to the center wins.</span></h2>
       <p class="mt-5 text-lg text-ink-soft">Race to the TOP DOG circle at the heart of the labyrinth carrying at least 5 bones, 5 diamonds, and 5 hearts.</p>
     </div>
     <div class="mt-14 grid gap-5 md:grid-cols-3">
@@ -131,7 +131,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
             <span class="font-display text-4xl font-extrabold md:text-6xl">5</span>
             <h3 class="text-xl font-bold md:text-2xl">{g.name}</h3>
           </div>
-          <p class="mt-1 text-sm text-ink-soft md:mt-3 md:text-base">{g.blurb}</p>
+          <p class="mt-1 text-base text-ink-soft md:mt-3 md:text-lg">{g.blurb}</p>
         </article>
       ))}
     </div>
@@ -178,26 +178,26 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
       <article class="reveal card row-span-4 grid grid-rows-subgrid gap-0 overflow-hidden" data-delay="1">
         <Image src={drBens} alt="Dr. Ben's blue dog clinic with a terrier in the doorway" width={600} class="aspect-square w-full object-cover" />
         <p class="eyebrow text-periwinkle px-6 pt-6"><span class="block">Lose a turn</span><span class="block">+1 bone</span></p>
-        <h3 class="mt-2 px-6 text-xl font-bold">Dr. Ben’s Dog Clinic</h3>
-        <p class="mt-2 px-6 pb-6 text-sm text-ink-soft">A quick check-up costs you a turn, but every good patient gets a bone.</p>
+        <h3 class="mt-2 px-6 text-2xl font-bold">Dr. Ben’s Dog Clinic</h3>
+        <p class="mt-2 px-6 pb-6 text-base text-ink-soft">A quick check-up costs you a turn, but every good patient gets a bone.</p>
       </article>
       <article class="reveal card row-span-4 grid grid-rows-subgrid gap-0 overflow-hidden" data-delay="2">
         <Image src={pawSpa} alt="The teal Paw Spa, with a terrier relaxing in a bubbly bath behind the window" width={600} class="aspect-square w-full object-cover" />
         <p class="eyebrow text-sage px-6 pt-6"><span class="block">Lose a turn</span><span class="block">+1 diamond</span></p>
-        <h3 class="mt-2 px-6 text-xl font-bold">The Paw Spa</h3>
-        <p class="mt-2 px-6 pb-6 text-sm text-ink-soft">Pampering takes time. Walk out a turn later with a sparkling new diamond.</p>
+        <h3 class="mt-2 px-6 text-2xl font-bold">The Paw Spa</h3>
+        <p class="mt-2 px-6 pb-6 text-base text-ink-soft">Pampering takes time. Walk out a turn later with a sparkling new diamond.</p>
       </article>
       <article class="reveal card row-span-4 grid grid-rows-subgrid gap-0 overflow-hidden" data-delay="3">
         <Image src={dogHouse} alt="The pink Dog House, with a terrier sitting in the doorway" width={600} class="aspect-square w-full object-cover" />
         <p class="eyebrow text-coral px-6 pt-6"><span class="block">Roll 2, 4 or 6</span><span class="block">to escape</span></p>
-        <h3 class="mt-2 px-6 text-xl font-bold">The Dog House</h3>
-        <p class="mt-2 px-6 pb-6 text-sm text-ink-soft">Land on a BAD DOG space and in you go. Only an even roll sets you free.</p>
+        <h3 class="mt-2 px-6 text-2xl font-bold">The Dog House</h3>
+        <p class="mt-2 px-6 pb-6 text-base text-ink-soft">Land on a BAD DOG space and in you go. Only an even roll sets you free.</p>
       </article>
       <article class="reveal card row-span-4 grid grid-rows-subgrid gap-0 overflow-hidden" data-delay="1">
         <Image src={parkSign} alt="A watercolor Welsh Terrier sitting on the grass beside a wooden DOG PARK sign" width={800} class="aspect-square w-full object-cover object-[40%_50%]" />
         <p class="eyebrow text-lime-deep px-6 pt-6">Trading post</p>
-        <h3 class="mt-2 px-6 text-xl font-bold">The Dog Park</h3>
-        <p class="mt-2 px-6 pb-6 text-sm text-ink-soft">Play a DOG PARK card to make doggy deals with the other pups and the Dog Warden.</p>
+        <h3 class="mt-2 px-6 text-2xl font-bold">The Dog Park</h3>
+        <p class="mt-2 px-6 pb-6 text-base text-ink-soft">Play a DOG PARK card to make doggy deals with the other pups and the Dog Warden.</p>
       </article>
     </div>
   </section>
@@ -216,8 +216,8 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
       <h2 class="mt-4 text-4xl font-bold sm:text-5xl">Drawn with love, played by families.</h2>
       <p class="mt-6 text-lg leading-relaxed text-ink-soft">
         Dog Park is the creation of <strong class="text-ink">Brenda Pokorny</strong>, a mosaic artist, children’s book
-        author-illustrator, and life-long dog lover. She combined her obsession with labyrinths with the joy of a lifetime
-        of best friends, many of whom show up, whimsically, on the board.
+        author-illustrator, and life-long dog lover. She combines her passion for labyrinths with the joy of a lifetime
+        of best friends, many of whom show up, whimsically, in the game.
       </p>
       <a href="/about" class="btn btn-ghost mt-8">Read Brenda’s story <Icon name="arrow" class="size-5" /></a>
     </div>
