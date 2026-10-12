@@ -92,6 +92,9 @@ const facts = [
             body: 'Her work is influenced by the ancient mosaics she has seen and the breathtaking scenery she has stumbled upon around the world.' },
           { tag: 'Lately', title: 'Mandalas & labyrinths', icon: 'bone',
             body: 'Recently she has been exploring mandalas and labyrinths in mosaic, borrowing from the hedge mazes and labyrinths she has visited, as well as her interest in meditation.' },
+          { tag: 'Stories for kids', title: 'Children’s book author/illustrator', icon: 'heart',
+            body: 'Brenda has written and illustrated multiple children’s books.  Books inspired by days spent with her 3 sons building train sets, playing games, exploring the woods, or puttering in the garden. My Garden, and Come Spring are available now, with Matt & Mike, and Colorbox in the works.',
+            link: { href: 'https://www.brendapokornymosaics.com/books-1', label: 'See her books' } },
           { tag: 'Step inside', title: 'Get Lost Mazes', icon: 'arrow',
             body: 'Immersive 360° interactive art experiences based on her mazes and labyrinths. Projected large-scale onto the floor, the labyrinths invite you to step into another world while the walls and ceiling swirl and change with each scene. Meant for all ages and all abilities, she hopes to stage them in venues around the country.' },
           { tag: 'And now', title: 'Dog Park: A Get Lost! Game', icon: 'check', highlight: true,
@@ -105,6 +108,11 @@ const facts = [
               <p class:list={['eyebrow text-[11px]', s.highlight ? 'text-lime' : 'text-lime-deep']}>{s.tag}</p>
               <h3 class="mt-2 text-2xl font-bold">{s.title}</h3>
               <p class:list={['mt-3 leading-relaxed', s.highlight ? 'text-cream/80' : 'text-ink-soft']}>{s.body}</p>
+              {s.link && (
+                <a href={s.link.href} target="_blank" rel="noopener" class="mt-4 inline-flex items-center gap-2 font-display font-semibold underline decoration-lime decoration-[3px] underline-offset-4 hover:decoration-ink">
+                  {s.link.label} <Icon name="arrow" class="size-4 -rotate-45" />
+                </a>
+              )}
             </div>
           </li>
         ))}
