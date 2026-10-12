@@ -20,7 +20,7 @@ const toc = [
   ['choice', 'CHOICE cards'],
   ['question', 'QUESTION cards'],
   ['transactions', 'Trades & playing cards'],
-  ['trading', 'Trading'],
+  ['trading', 'Trading in the Dog Park'],
   ['strategy', 'Strategy'],
   ['winning', 'Winning the game'],
 ];
@@ -99,6 +99,7 @@ const spaces = [
           <li>Give each player 1 <strong>PAW DOG PARK</strong> card. Shuffle the remaining PAW cards, and place them face down on the PAW PRINT card space.</li>
           <li>Shuffle the <strong>DOGGY DOOR</strong> cards, and place them face down on the DOGGY DOOR card space.</li>
           <li>Shuffle the <strong>QUESTION</strong> cards and place them face down on the QUESTION MARK space.</li>
+          <li>Place the bone, diamond, and heart tokens in piles in the Dog Park logo space. This is the Dog Warden’s bone pile.</li>
         </ol>
       </section>
 
@@ -118,7 +119,7 @@ const spaces = [
         </div>
         <p>If you land on a space with a <strong>BONE</strong>, take 1 bone from the Dog Warden’s bone pile, and place it in your home space on the game board. If you land on a <strong>PAW</strong> print, take the top card from the PAW card stack, and follow instructions on the card. If you land on a <strong>PUP CUP</strong> space, choose either 1 bone or 1 heart from the Dog Warden’s bone pile, and place it in your home space. If you land on a <strong>STEAL ONE BONE</strong> space, you may steal 1 bone from any player, including a dog that has arrived at the center of the labyrinth. If no player has a bone, take 1 bone from the Dog Warden’s bone pile, and place it in your home space.</p>
         <div class="my-6 rounded-2xl border-l-4 border-terrier bg-butter/40 p-5">
-          <p class="!mb-0">If you have the opportunity to take a token from the Dog Warden, but none of that token remains in the Dog Warden’s bone pile, you do not get to take that token. You may not swap a different token if none of the type you were instructed to take remains. For example, if you draw a PAW card that tells you to take a bone, but the Dog Warden’s bone supply is empty, you may not take a heart token instead. If you draw a CHOICE card, you may select your choice of token from the Dog Warden.</p>
+          <p class="!mb-0">If you have the opportunity to take a token from the Dog Warden, but none of that token remains in the Dog Warden’s bone pile, you do not get to take a different token. If you draw a CHOICE card, you may select your choice of token from the Dog Warden. You want to save a STEAL ONE BONE or CHOICE card to play later.</p>
         </div>
       </section>
 
@@ -161,8 +162,7 @@ const spaces = [
         <div class="grid items-start gap-6 sm:grid-cols-[1fr_180px]">
           <div>
             <h2 class="mb-6 text-3xl font-bold">The Dog Park</h2>
-            <p>The DOG PARK is used for making doggy deals. You may use a DOG PARK card to go to the DOG PARK only after you have passed the space marked with the DOG PARK sign. If you choose to use your DOG PARK card to go to the DOG PARK, you must wait until your next turn to make a trade. You may make <strong>1 trade per turn</strong>. You may stay in the DOG PARK for as many consecutive turns as you like.</p>
-            <p class="mt-4">You may not play a DOG PARK card and go to the DOG PARK while in the DOG HOUSE, or DR. BEN’S, or the PAW SPA.</p>
+            <p>The DOG PARK is used for making doggy deals. You may use a DOG PARK card to go to the DOG PARK only after you have passed the space marked with the DOG PARK sign. You may not play a DOG PARK card while in the DOG HOUSE, DR. BEN’S, or the PAW SPA. If you choose to use your DOG PARK card to go to the DOG PARK, you must wait until your next turn to make a trade. You may make <strong>1 trade per turn</strong>. You may stay in the DOG PARK for as many consecutive turns as you like.</p>
           </div>
           <Image src={parkSign} alt="A terrier sitting by the DOG PARK sign" width={500} class="order-first aspect-[4/3] w-52 -rotate-2 rounded-2xl border-4 border-ink object-cover object-[42%_50%] sm:order-none sm:mt-14 sm:w-full" />
         </div>
@@ -187,12 +187,12 @@ const spaces = [
       </section>
 
       <section id="trading" class="scroll-mt-36 lg:scroll-mt-28">
-        <h2 class="mb-6 text-3xl font-bold">Trading</h2>
+        <h2 class="mb-6 text-3xl font-bold">Trading in the Dog Park</h2>
         <p>There are 3 ways to trade.</p>
         <div class="grid gap-4">
           <div class="card p-6">
             <p class="eyebrow text-lime-deep">1 · The Dog Warden</p>
-            <p class="!mb-0 mt-3">You can trade with the Dog Warden at a <strong>2:1 trade ratio</strong>. You may trade 2 bones, or 2 diamonds, or 2 hearts, for 1 bone, or 1 diamond, or 1 heart. For example, you may trade away 2 bones for 1 diamond. You must trade away 2 of the same token. You may not trade away 1 heart and 1 diamond for 1 bone.</p>
+            <p class="!mb-0 mt-3">You can trade with the Dog Warden at a <strong>2:1 trade ratio</strong>.</p>
           </div>
           <div class="card p-6">
             <p class="eyebrow text-lime-deep">2 · DOGGY DOOR</p>
@@ -220,7 +220,7 @@ const spaces = [
           <div class="relative text-cream">
             <p class="eyebrow text-lime">Winning the game</p>
             <h2 class="mt-3 text-3xl font-extrabold sm:text-4xl">Become TOP DOG.</h2>
-            <p class="mt-5 !text-cream/90">The first dog to arrive at the center space in the labyrinth, while having 5 bones, and 5 diamonds, and 5 hearts is the winner and TOP DOG. You do not need to roll the exact number of spaces to win.</p>
+            <p class="mt-5 !text-cream/90">The first dog to arrive at the TOP DOG center space in the labyrinth, while having 5 bones, and 5 diamonds, and 5 hearts is the winner and TOP DOG. You do not need to roll the exact number of spaces to win.</p>
           </div>
         </div>
         <h3 class="mb-4 mt-10 text-xl font-bold">What if you arrive without all 15 tokens?</h3>
