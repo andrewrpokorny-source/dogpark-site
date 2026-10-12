@@ -1,5 +1,5 @@
 import type { ImageMetadata } from 'astro';
-import logoLime from '../assets/logo-lime.webp';
+import logoLime from '../assets/logo-lime-framed.webp';
 import logoWhite from '../assets/logo-white.webp';
 import logoYellow from '../assets/logo-yellow.webp';
 import logoLavender from '../assets/logo-lavender.webp';
