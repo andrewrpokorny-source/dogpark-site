@@ -5,6 +5,11 @@ import Icon from '../components/Icon.astro';
 import board from '../assets/game-board.webp';
 import { pups, pupName } from '../data/pups';
 
+import Token from '../components/Token.astro';
+import boneArt from '../assets/tokens/bone.webp';
+import diamondArt from '../assets/tokens/diamond.webp';
+import heartArt from '../assets/tokens/heart.webp';
+const [artBone, artDiamond, artHeart] = await Promise.all([boneArt, diamondArt, heartArt].map(async (src) => (await getImage({ src, width: 96, height: 96, format: 'webp' })).src));
 const pupThumbs = await Promise.all(pups.map(async (p) => (await getImage({ src: p.image, width: 160, height: 160, fit: 'cover', format: 'webp' })).src));
 const tokenRows = [
   { id: 'bone', label: 'Bones', icon: 'bone', color: 'text-terrier', bar: 'bg-terrier' },
@@ -25,7 +30,7 @@ const tokenRows = [
     </div>
   </section>
 
-  <section class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:px-8" data-game>
+  <section class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:px-8" data-game data-art-bone={artBone} data-art-diamond={artDiamond} data-art-heart={artHeart}>
     <!-- Board -->
     <div class="lg:sticky lg:top-24 lg:self-start">
       <div class="relative overflow-hidden rounded-[1.75rem] border-4 border-ink bg-ink shadow-2xl">
@@ -106,7 +111,7 @@ const tokenRows = [
           {tokenRows.map((t) => (
             <div class="token-stat rounded-2xl border-2 border-ink/10 bg-cream p-3 transition-colors">
               <div class="flex items-center justify-between">
-                <Icon name={t.icon} class={`size-6 ${t.color}`} />
+                <Token name={t.id} class="size-8" />
                 <p class="font-display text-2xl font-extrabold leading-none"><span data-count={t.id} class="inline-block">0</span><span class="text-sm font-semibold text-ink-soft">/5</span></p>
               </div>
               <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-ink/10"><div data-bar={t.id} class={`h-full rounded-full ${t.bar} transition-[width] duration-300`} style="width:0%"></div></div>

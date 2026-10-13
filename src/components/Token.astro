@@ -1,0 +1,18 @@
+---
+// Brenda's watercolor bone, diamond and heart art from the game cards.
+// Use wherever a game token appears; Icon.astro keeps the flat glyphs for decorative/UI use.
+import { Image } from 'astro:assets';
+import bone from '../assets/tokens/bone.webp';
+import diamond from '../assets/tokens/diamond.webp';
+import heart from '../assets/tokens/heart.webp';
+
+const tokenArt = { bone, diamond, heart };
+
+interface Props {
+  name: 'bone' | 'diamond' | 'heart';
+  class?: string;
+  alt?: string;
+}
+const { name, class: cls = 'size-6', alt = '' } = Astro.props;
+---
+<Image src={tokenArt[name]} alt={alt} width={128} height={128} class:list={['object-contain', cls]} aria-hidden={alt ? undefined : 'true'} />

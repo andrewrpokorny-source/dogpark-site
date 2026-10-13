@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import PageHero from '../components/PageHero.astro';
 import Icon from '../components/Icon.astro';
+import Token from '../components/Token.astro';
 import pawSpa from '../assets/paw-spa.webp';
 import dogHouse from '../assets/dog-house.webp';
 import InteractiveBoard from '../components/InteractiveBoard.astro';
@@ -26,7 +27,7 @@ const toc = [
 ];
 
 const spaces = [
-  { name: 'BONE', what: 'Take 1 bone from the Dog Warden’s bone pile.', icon: 'bone', tone: 'bg-butter' },
+  { name: 'BONE', what: 'Take 1 bone from the Dog Warden’s bone pile.', icon: 'bone', tone: 'bg-butter/40' },
   { name: 'PAW print', what: 'Draw the top PAW card and follow its instructions.', icon: 'paw', tone: 'bg-lime-soft' },
   { name: 'PUP CUP', what: 'Choose 1 bone or 1 heart from the Dog Warden.', icon: 'heart', tone: 'bg-coral/30' },
   { name: 'STEAL ONE BONE', what: 'Steal 1 bone from any player, even one at the center.', icon: 'bone', tone: 'bg-mauve/30' },
@@ -44,9 +45,9 @@ const spaces = [
           Arrive at the center circle with at least 5 bones, 5 diamonds, and 5 hearts.
         </p>
         <div class="mt-8 flex flex-wrap gap-3">
-          <span class="flex items-center gap-2 rounded-full bg-butter px-4 py-2 font-display font-bold text-ink"><Icon name="bone" class="size-5 text-terrier" />× 5</span>
-          <span class="flex items-center gap-2 rounded-full bg-periwinkle px-4 py-2 font-display font-bold text-ink"><Icon name="diamond" class="size-5 text-white" />× 5</span>
-          <span class="flex items-center gap-2 rounded-full bg-coral px-4 py-2 font-display font-bold text-ink"><Icon name="heart" class="size-5 text-token-red" />× 5</span>
+          <span class="flex items-center gap-2 rounded-full bg-cream px-4 py-2 font-display font-bold text-ink"><Token name="bone" class="size-7" />× 5</span>
+          <span class="flex items-center gap-2 rounded-full bg-cream px-4 py-2 font-display font-bold text-ink"><Token name="diamond" class="size-7" />× 5</span>
+          <span class="flex items-center gap-2 rounded-full bg-cream px-4 py-2 font-display font-bold text-ink"><Token name="heart" class="size-7" />× 5</span>
         </div>
         <dl class="mt-10 border-t border-cream/15 pt-8 text-sm">
           <div><dt class="eyebrow text-[11px] text-cream/50">Who goes first</dt><dd class="mt-1 font-display font-semibold">First to roll a 4, then clockwise</dd></div>
@@ -109,7 +110,7 @@ const spaces = [
         <div class="my-8 grid gap-3 sm:grid-cols-2">
           {spaces.map((s) => (
             <div class="flex gap-4 rounded-2xl border-2 border-ink/10 bg-white p-4">
-              <span class:list={['grid size-12 shrink-0 place-items-center rounded-xl', s.tone]}><Icon name={s.icon} class="size-6" /></span>
+              <span class:list={['grid size-12 shrink-0 place-items-center rounded-xl', s.tone]}>{s.icon === 'paw' ? <Icon name="paw" class="size-6" /> : <Token name={s.icon} class="size-9" />}</span>
               <div>
                 <p class="font-display font-bold">{s.name}</p>
                 <p class="!mb-0 text-sm">{s.what}</p>

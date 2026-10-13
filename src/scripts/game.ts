@@ -6,7 +6,7 @@ type Token = 'bone' | 'diamond' | 'heart';
 type Place = 'doghouse' | 'drbens' | 'spa' | 'dogpark';
 type Track = 'main' | 'loop';
 
-interface Option { id: string; label: string; tone?: 'primary' | 'dark' | 'ghost' }
+interface Option { id: string; label: string; tone?: 'primary' | 'dark' | 'ghost'; img?: string }
 
 const TOKENS: Token[] = ['bone', 'diamond', 'heart'];
 const NAMES: Record<Token, string> = { bone: 'bone', diamond: 'diamond', heart: 'heart' };
@@ -57,6 +57,9 @@ const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matc
 
 export function initGame(root: HTMLElement) {
   const $ = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+  // Brenda's card art for each token (URLs passed in from the page)
+  const ART: Record<Token, string> = { bone: root.dataset.artBone!, diamond: root.dataset.artDiamond!, heart: root.dataset.artHeart! };
+  const art = (t: Token, cls = 'size-9') => `<img src="${ART[t]}" alt="" class="${cls} object-contain" />`;
   const tokenEl = $('[data-token]');
   const tokenImg = $<HTMLImageElement>('[data-token-img]');
   const ring = $('[data-ring]');
@@ -136,7 +139,12 @@ export function initGame(root: HTMLElement) {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = `btn ${o.tone === 'dark' ? 'btn-dark' : o.tone === 'ghost' ? 'btn-ghost' : 'btn-primary'} !px-4 !py-2 text-sm`;
-        b.textContent = o.label;
+        if (o.img) {
+          b.classList.add('gap-1.5');
+          const i = document.createElement('img');
+          i.src = o.img; i.alt = ''; i.className = 'size-6 object-contain';
+          b.append(i, o.label);
+        } else b.textContent = o.label;
         b.addEventListener('click', () => { row.remove(); primary.disabled = false; resolve(o.id); });
         row.append(b);
       }
@@ -144,7 +152,7 @@ export function initGame(root: HTMLElement) {
     });
   }
 
-  const tokenOptions = (filter: Token[] = TOKENS): Option[] => filter.map((t) => ({ id: t, label: `${t === 'bone' ? '🦴' : t === 'diamond' ? '💎' : '❤️'} ${NAMES[t][0].toUpperCase()}${NAMES[t].slice(1)}` }));
+  const tokenOptions = (filter: Token[] = TOKENS): Option[] => filter.map((t) => ({ id: t, label: `${NAMES[t][0].toUpperCase()}${NAMES[t].slice(1)}`, img: ART[t] }));
 
   // ---------- die ----------
   const PIPS: Record<number, number[]> = { 1: [4], 2: [0, 8], 3: [0, 4, 8], 4: [0, 2, 6, 8], 5: [0, 2, 4, 6, 8], 6: [0, 2, 3, 5, 6, 8] };
@@ -222,17 +230,17 @@ export function initGame(root: HTMLElement) {
     const t = spaceType();
     switch (t) {
       case 'bone':
-        showEvent('Bone space!', 'Take 1 bone from the Dog Warden’s bone pile.', '🦴');
+        showEvent('Bone space!', 'Take 1 bone from the Dog Warden’s bone pile.', art('bone'));
         give('bone', 1, '(bone space)');
         break;
       case 'pupcup': {
         const pick = await ask('PUP CUP!', 'Choose 1 bone or 1 heart from the Dog Warden.', tokenOptions(['bone', 'heart']), '🍦');
         give(pick as Token, 1, '(PUP CUP)');
-        showEvent('Yum.', `You picked a ${pick}.`, '🍦');
+        showEvent('Yum.', `You picked a ${pick}.`, art(pick as Token));
         break;
       }
       case 'steal':
-        showEvent('STEAL ONE BONE', 'No other dogs to rob in a sample round, so you take a bone from the Dog Warden instead.', '🦴');
+        showEvent('STEAL ONE BONE', 'No other dogs to rob in a sample round, so you take a bone from the Dog Warden instead.', art('bone'));
         give('bone', 1, '(STEAL ONE BONE)');
         break;
       case 'baddog':
@@ -261,7 +269,7 @@ export function initGame(root: HTMLElement) {
     if (!deck.length) deck = shuffle(PAW_DECK);
     const card = deck.pop()!;
     if (card.kind === 'take') {
-      showEvent('PAW card', `Take 1 ${card.token} from the Dog Warden.`, '🐾');
+      showEvent('PAW card', `Take 1 ${card.token} from the Dog Warden.`, art(card.token));
       give(card.token, 1, '(PAW card)');
     } else if (card.kind === 'choice') {
       const pick = await ask('PAW card: CHOICE!', 'Use it now to take any token, or save it to play before a future roll.', [...tokenOptions(), { id: 'save', label: 'Save for later', tone: 'ghost' }], '🎁');

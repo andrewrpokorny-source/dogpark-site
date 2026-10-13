@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
+import Token from '../components/Token.astro';
 import pawSpa from '../assets/paw-spa.webp';
 import dogHouse from '../assets/dog-house.webp';
 import ToyFair from '../components/ToyFair.astro';
@@ -71,14 +72,14 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
             <Image src={board} alt="The Dog Park game board: a winding labyrinth path on green grass leading to the TOP DOG circle" width={1120} class="block w-full" loading="eager" fetchpriority="high" />
           </div>
           <!-- floating tokens -->
-          <div class="bob tilt-pop absolute -left-3 top-10 grid size-16 place-items-center rounded-2xl border-2 border-ink bg-butter shadow-[0_4px_0_var(--color-ink)] sm:-left-6 sm:size-20" style="--r:-10deg" aria-hidden="true">
-            <Icon name="bone" class="size-9 text-terrier sm:size-11" />
+          <div class="bob tilt-pop absolute -left-3 top-10 grid size-16 place-items-center rounded-2xl border-2 border-ink bg-white shadow-[0_4px_0_var(--color-ink)] sm:-left-6 sm:size-20" style="--r:-10deg" aria-hidden="true">
+            <Token name="bone" class="size-12 sm:size-15" />
           </div>
-          <div class="bob tilt-pop absolute -right-2 top-1/3 grid size-14 place-items-center rounded-2xl border-2 border-ink bg-periwinkle shadow-[0_4px_0_var(--color-ink)] sm:-right-6 sm:size-18" style="--r:8deg;animation-delay:-1.6s" aria-hidden="true">
-            <Icon name="diamond" class="size-8 text-white sm:size-10" />
+          <div class="bob tilt-pop absolute -right-2 top-1/3 grid size-14 place-items-center rounded-2xl border-2 border-ink bg-white shadow-[0_4px_0_var(--color-ink)] sm:-right-6 sm:size-18" style="--r:8deg;animation-delay:-1.6s" aria-hidden="true">
+            <Token name="diamond" class="size-11 sm:size-14" />
           </div>
-          <div class="bob tilt-pop absolute -bottom-4 left-1/4 grid size-14 place-items-center rounded-2xl border-2 border-ink bg-coral shadow-[0_4px_0_var(--color-ink)] sm:size-16" style="--r:-4deg;animation-delay:-3.2s" aria-hidden="true">
-            <Icon name="heart" class="size-8 text-token-red sm:size-9" />
+          <div class="bob tilt-pop absolute -bottom-4 left-1/4 grid size-14 place-items-center rounded-2xl border-2 border-ink bg-white shadow-[0_4px_0_var(--color-ink)] sm:size-16" style="--r:-4deg;animation-delay:-3.2s" aria-hidden="true">
+            <Token name="heart" class="size-10 sm:size-12" />
           </div>
           <div class="tilt-pop absolute -bottom-6 -right-4 hidden rotate-6 rounded-2xl border-2 border-ink bg-white px-4 py-3 text-center shadow-[0_4px_0_var(--color-ink)] sm:block">
             <p class="eyebrow text-[10px] text-ink-soft">Goal</p>
@@ -125,7 +126,7 @@ const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'V
       {goals.map((g, i) => (
         <article class="reveal card group grid grid-cols-[auto_1fr] items-center gap-x-4 p-5 transition-transform duration-300 hover:-translate-y-1.5 md:block md:p-7" data-delay={String(i + 1)}>
           <div class:list={['row-span-2 grid size-16 place-items-center self-start rounded-2xl transition-transform duration-300 group-hover:rotate-[-8deg] group-hover:scale-110 md:size-20', g.bg]}>
-            <Icon name={g.icon} class={`size-9 md:size-11 ${g.color}`} />
+            <Token name={g.icon} class="size-12 md:size-15" />
           </div>
           <div class="flex items-baseline gap-2.5 md:mt-6 md:gap-3">
             <span class="font-display text-4xl font-extrabold md:text-6xl">5</span>
