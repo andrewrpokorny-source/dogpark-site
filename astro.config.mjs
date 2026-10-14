@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://dogpark-site-production.up.railway.app',
+  site: 'https://dogparkgames.com',
   vite: {
     plugins: [tailwindcss()]
   }

@@ -5,6 +5,7 @@ import handler from 'serve-handler';
 
 const port = Number(process.env.PORT) || 3000;
 const password = process.env.SITE_PASSWORD;
+const CANONICAL_HOST = 'dogparkgames.com';
 
 const matches = (given, expected) => {
   const a = Buffer.from(given);
@@ -27,7 +28,14 @@ http
       res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="Dog Park preview", charset="UTF-8"' });
       return res.end('Password required');
     }
-    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+    const host = (req.headers.host || '').split(':')[0].toLowerCase();
+    // One public address: send www to the bare domain.
+    if (host === `www.${CANONICAL_HOST}`) {
+      res.writeHead(301, { Location: `https://${CANONICAL_HOST}${req.url}` });
+      return res.end();
+    }
+    // Keep preview hosts (e.g. *.up.railway.app) out of search results.
+    if (host !== CANONICAL_HOST) res.setHeader('X-Robots-Tag', 'noindex, nofollow');
     return handler(req, res, { public: 'dist', cleanUrls: true });
   })
   .listen(port, '0.0.0.0', () => {
