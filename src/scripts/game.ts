@@ -319,6 +319,7 @@ export function initGame(root: HTMLElement) {
       log('Reached the center without 5 of each');
     }
     render();
+    root.dispatchEvent(new CustomEvent('game:finish', { detail: { won: hasGoal(), turns: s.turn } }));
   }
 
   // ---------- turn flow ----------
@@ -497,6 +498,7 @@ export function initGame(root: HTMLElement) {
     showEvent('Ready when you are!', 'Collect 5 bones, 5 diamonds, and 5 hearts, then race to TOP DOG. Roll to start.', '🐾');
     log('New game. You start with 1 DOG PARK card.');
     render();
+    root.dispatchEvent(new CustomEvent('game:new'));
   }
 
   // ---------- confetti ----------

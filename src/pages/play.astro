@@ -86,6 +86,27 @@ const tokenRows = [
         <div data-event></div>
       </div>
 
+      <!-- End of round: get the real game -->
+      <div data-finish-signup hidden class="card border-ink bg-butter p-5 shadow-[0_5px_0_var(--color-ink)] sm:p-6">
+        <form data-form novalidate>
+          <p class="eyebrow text-lime-deep">Pre-orders open mid-November</p>
+          <h2 class="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">Want the real board on your table?</h2>
+          <p class="mt-2 text-ink-soft">Get the pre-order link the moment Dog Park is ready, before we share it anywhere else.</p>
+          <div class="mt-4 flex flex-col gap-3 sm:flex-row">
+            <label class="sr-only" for="finish-email">Email</label>
+            <input class="field min-w-0 flex-1" id="finish-email" name="email" type="email" autocomplete="email" required placeholder="you@example.com" />
+            <button class="btn btn-dark shrink-0" type="submit">Send me the link <Icon name="paw" class="size-5" /></button>
+          </div>
+          <p data-error role="alert" class="mt-2 hidden text-sm font-semibold text-token-red"></p>
+          <p class="mt-2 text-xs text-ink-soft">No spam. Just bones. Unsubscribe anytime.</p>
+        </form>
+        <div data-done hidden role="status">
+          <p class="eyebrow text-lime-deep">You’re on the list</p>
+          <p class="mt-2 text-2xl font-extrabold leading-tight sm:text-3xl">Good dog! We’ll email you when pre-orders open.</p>
+          <p class="mt-2 text-ink-soft">Meanwhile, pick a different pup and play another round.</p>
+        </div>
+      </div>
+
       <!-- Pup + stats -->
       <div class="card p-5">
         <div class="flex items-center justify-between gap-3">
@@ -146,6 +167,60 @@ const tokenRows = [
 
 <script>
   import { initGame } from '../scripts/game';
+  import { subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+  import { popupState, markJoined } from '../lib/signup-popup';
+
   const root = document.querySelector<HTMLElement>('[data-game]');
   if (root) initGame(root);
+
+  // End-of-round sign-up: people who just played are the warmest leads.
+  const card = document.querySelector<HTMLElement>('[data-finish-signup]');
+  if (root && card) {
+    const form = card.querySelector<HTMLFormElement>('[data-form]')!;
+    const done = card.querySelector<HTMLElement>('[data-done]')!;
+    const email = form.querySelector<HTMLInputElement>('input[name="email"]')!;
+    const err = form.querySelector<HTMLElement>('[data-error]')!;
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    let last = { won: false, turns: 0 };
+    const showJoined = () => { form.hidden = true; done.hidden = false; };
+
+    root.addEventListener('game:finish', (e) => {
+      last = (e as CustomEvent<{ won: boolean; turns: number }>).detail;
+      if (popupState() === 'joined') showJoined();
+      card.hidden = false;
+      // Bring it into view on phones, where the panel sits below the board
+      requestAnimationFrame(() => {
+        const r = card.getBoundingClientRect();
+        if (r.bottom > innerHeight) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+    root.addEventListener('game:new', () => { card.hidden = true; });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      err.classList.add('hidden');
+      if (!email.value || !email.checkValidity()) {
+        err.textContent = 'Please enter a valid email so we can reach you.';
+        err.classList.remove('hidden');
+        email.focus();
+        return;
+      }
+      submit.disabled = true;
+      submit.setAttribute('aria-busy', 'true');
+      const ok = await subscribe({ email: email.value.trim() }, [KLAVIYO_LISTS.launch], 'Sample game finish', {
+        'Signed up on page': location.pathname,
+        'Sample game result': last.won ? 'TOP DOG' : 'Reached center',
+        'Sample game turns': last.turns,
+      });
+      submit.disabled = false;
+      submit.removeAttribute('aria-busy');
+      if (!ok) {
+        err.textContent = 'We couldn’t add you just now. Please try again in a minute.';
+        err.classList.remove('hidden');
+        return;
+      }
+      markJoined();
+      showJoined();
+    });
+  }
 </script>
