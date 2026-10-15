@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const updated = 'October 14, 2026';
+const sections = [
+  {
+    title: 'What we collect',
+    body: [
+      'Information you give us. When you join our email list, send a message, request a Toy Fair meeting or ask about wholesale, we collect what you type into the form: usually your name and email address, and sometimes your phone number, company or store details, and your message.',
+      'Information about your visit. We count visits to understand which pages people read and how they found us (for example, from a search engine, social media or one of our emails). We also see roughly which country and type of device a visit comes from. This does not identify you by name.',
+      'Your cart. The store and cart are a preview for now. Items you add are saved only in your own browser, and we never take payment on this site.',
+    ],
+  },
+  {
+    title: 'How we use it',
+    body: [
+      'To send the emails you asked for, such as launch news, pre-order announcements and merch updates. To reply to your messages and meeting or wholesale requests. To understand how the site is used so we can make it better. We do not sell or rent your personal information.',
+    ],
+  },
+  {
+    title: 'Services we use',
+    body: [
+      'Klaviyo sends our emails and stores our mailing lists and form submissions. Its script on this site uses a cookie to recognize your browser, so that visits after clicking one of our emails are connected to your sign-up.',
+      'Cloudflare Web Analytics counts visits. It does not use cookies or collect personal information.',
+      'Railway hosts the website, and Google Workspace handles email sent to help@dogparkgames.com.',
+      'Each service handles data under its own privacy policy.',
+    ],
+  },
+  {
+    title: 'Your choices',
+    body: [
+      'Every email we send has an unsubscribe link, and you can use it at any time. To see, correct or delete the information we hold about you, email help@dogparkgames.com and we will take care of it. You can also block or clear cookies in your browser settings.',
+    ],
+  },
+  {
+    title: 'Children',
+    body: [
+      'Dog Park is a family game, but this website is meant for adults. We do not knowingly collect personal information from children under 13. If you believe a child has given us their information, email us and we will delete it.',
+    ],
+  },
+  {
+    title: 'Changes',
+    body: [
+      'If we change this policy, we will update it on this page and change the date at the top.',
+    ],
+  },
+];
+---
+<Layout title="Privacy Policy" description="How Dog Park Games collects and uses information on dogparkgames.com.">
+  <section class="mx-auto max-w-3xl px-4 py-10 sm:px-6 md:py-16">
+    <p class="eyebrow text-lime-deep">Privacy</p>
+    <h1 class="mt-4 text-[clamp(2.25rem,6vw,3.75rem)] font-extrabold leading-[1.05]">Privacy Policy</h1>
+    <p class="mt-4 text-ink-soft">Last updated {updated}</p>
+    <p class="mt-8 text-lg leading-relaxed text-ink-soft">
+      This policy explains what information Get Lost Mazes LLC (“Dog Park Games”, “we”) collects on
+      dogparkgames.com and how we use it.
+    </p>
+
+    <div class="mt-12 space-y-12">
+      {sections.map((s) => (
+        <section>
+          <h2 class="text-2xl font-extrabold sm:text-3xl">{s.title}</h2>
+          {s.body.map((p) => <p class="mt-4 text-lg leading-relaxed text-ink-soft">{p}</p>)}
+        </section>
+      ))}
+      <section>
+        <h2 class="text-2xl font-extrabold sm:text-3xl">Contact us</h2>
+        <p class="mt-4 text-lg leading-relaxed text-ink-soft">
+          Questions about this policy? Email{' '}
+          <a class="font-semibold text-ink underline decoration-lime decoration-2 underline-offset-4" href="mailto:help@dogparkgames.com">help@dogparkgames.com</a>{' '}
+          or write to us at:
+        </p>
+        <address class="mt-4 text-lg not-italic leading-relaxed text-ink-soft">
+          Get Lost Mazes LLC<br />
+          123 Institute Street<br />
+          P.O. Box 901<br />
+          Mooresville, NC 28115
+        </address>
+      </section>
+    </div>
+  </section>
+</Layout>
