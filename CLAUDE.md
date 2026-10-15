@@ -1,10 +1,10 @@
 # Dog Park site
 
-Astro + Tailwind v4 static site, live at https://dogparkgames.com (launched Oct 14, 2026). See README.md.
+Astro + Tailwind v4 static site, live at https://www.dogparkgames.com (launched Oct 14, 2026). See README.md.
 
 - Start the dev server in background mode: `astro dev --background` (stop with `astro dev stop`).
-- `npm start` runs `server.mjs`, which serves `dist/` (optional password via `SITE_PASSWORD`). It 301s www → dogparkgames.com and sends `X-Robots-Tag: noindex` on any other host (e.g. the Railway preview URL).
-- Hosting: Railway service `dogpark-site` (auto-deploys `main`), custom domains dogparkgames.com + www. DNS is in Squarespace (Domains → dogparkgames.com → DNS): ALIAS @ and CNAME www point to Railway; keep the Google Workspace MX, Klaviyo (`send`, `mtd1/2._domainkey`, site-verification), SPF, DMARC and `google._domainkey` records.
+- `npm start` runs `server.mjs`, which serves `dist/` (optional password via `SITE_PASSWORD`). It 301s dogparkgames.com → www.dogparkgames.com and sends `X-Robots-Tag: noindex` on any other host (e.g. the Railway preview URL).
+- Hosting: Railway service `dogpark-site` (auto-deploys `main`), custom domain www.dogparkgames.com. DNS is in Squarespace (Domains → dogparkgames.com → DNS): CNAME www points to Railway. Squarespace can't point the bare domain at Railway with a working certificate (no real ALIAS/flattening), so Squarespace Domain Forwarding sends dogparkgames.com → https://www.dogparkgames.com; keep the Google Workspace MX, Klaviyo (`send`, `mtd1/2._domainkey`, site-verification), SPF, DMARC and `google._domainkey` records.
 - Store and cart are demo-only; no payments yet.
 - Klaviyo (`src/lib/klaviyo.ts`, public site key only): klaviyo.js loads on every page; Notify Me subscribes to the launch list (and merch list if ticked); contact form, Viewed Product, Added to Cart and Started Checkout are tracked as events. Never put a Klaviyo private key in client code.
 - Wholesale page `/wholesale`: stockist form sends a "Submitted Wholesale Inquiry" event (and trade-list subscribe if ticked). Set `faireUrl` in `src/data/wholesale.ts` to the Faire Direct link once approved; the page then shows "Shop wholesale on Faire" buttons.

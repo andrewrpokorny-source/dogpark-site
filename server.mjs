@@ -5,7 +5,10 @@ import handler from 'serve-handler';
 
 const port = Number(process.env.PORT) || 3000;
 const password = process.env.SITE_PASSWORD;
-const CANONICAL_HOST = 'dogparkgames.com';
+// www is the public address: Squarespace DNS can't point the bare domain at Railway with a valid
+// certificate, so Squarespace forwards dogparkgames.com -> www.dogparkgames.com.
+const CANONICAL_HOST = 'www.dogparkgames.com';
+const BARE_HOST = 'dogparkgames.com';
 
 const matches = (given, expected) => {
   const a = Buffer.from(given);
@@ -29,8 +32,8 @@ http
       return res.end('Password required');
     }
     const host = (req.headers.host || '').split(':')[0].toLowerCase();
-    // One public address: send www to the bare domain.
-    if (host === `www.${CANONICAL_HOST}`) {
+    // One public address: send the bare domain to www.
+    if (host === BARE_HOST) {
       res.writeHead(301, { Location: `https://${CANONICAL_HOST}${req.url}` });
       return res.end();
     }
