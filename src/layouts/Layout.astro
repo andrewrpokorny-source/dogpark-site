@@ -9,9 +9,15 @@ import { cloudflareToken } from '../data/analytics';
 interface Props {
   title?: string;
   description?: string;
+  /** keep this page out of search results (and the sitemap) */
+  noindex?: boolean;
+  /** schema.org structured data for this page */
+  jsonLd?: object | object[];
 }
 const {
   title,
+  noindex = false,
+  jsonLd,
   description = 'Dog Park: A Get Lost! Game. Move your dog through the labyrinth collecting bones, diamonds and hearts. A family-friendly board game for all ages.',
 } = Astro.props;
 const fullTitle = title ? `${title} · Dog Park` : 'Dog Park · A Get Lost! Game';
@@ -25,7 +31,9 @@ const ogImage = new URL('/og.jpg', Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#b4cb76" />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
+    <link rel="sitemap" href="/sitemap.xml" />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 

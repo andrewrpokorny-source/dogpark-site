@@ -14,6 +14,7 @@ import parkSign from '../assets/dog-park-sign.webp';
 import DoggyDoor from '../components/DoggyDoor.astro';
 import magnetOnCar from '../assets/magnet-on-car-lime.webp';
 import teeFolded from '../assets/tee-folded.webp';
+import { siteJsonLd } from '../data/structured-data';
 
 const goals = [
   { icon: 'bone', name: 'Bones', color: 'text-terrier', bg: 'bg-butter/50', blurb: 'Land on bone spaces, Pup Cups, or swipe one with Steal One Bone.' },
@@ -29,7 +30,7 @@ const steps = [
 
 const marquee = ['Collect bones', 'Dodge the dog house', 'Trade at the park', 'Visit Dr. Ben', 'Relax at the Paw Spa', 'Become TOP DOG'];
 ---
-<Layout>
+<Layout jsonLd={siteJsonLd}>
   <!-- HERO -->
   <section class="relative overflow-hidden">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
