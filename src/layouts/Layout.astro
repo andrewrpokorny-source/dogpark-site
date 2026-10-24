@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import AnnouncementBar from '../components/AnnouncementBar.astro';
 import SignupPopup from '../components/SignupPopup.astro';
-import { cloudflareToken } from '../data/analytics';
+import { plausibleScript } from '../data/analytics';
 
 interface Props {
   title?: string;
@@ -53,8 +53,14 @@ const ogImage = new URL('/og.jpg', Astro.site);
     <meta name="twitter:image" content={ogImage} />
     <title>{fullTitle}</title>
     <script is:inline>document.documentElement.classList.add('js');</script>
-    {cloudflareToken && (
-      <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cloudflareToken })}></script>
+    {plausibleScript && (
+      <Fragment>
+        <script is:inline async src={plausibleScript}></script>
+        <script is:inline>
+          window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+          plausible.init()
+        </script>
+      </Fragment>
     )}
   </head>
   <body class="flex min-h-dvh flex-col">

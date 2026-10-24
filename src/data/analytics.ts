@@ -1,4 +1,5 @@
-// Cloudflare Web Analytics (free, cookieless: no consent banner needed).
-// Paste the site token from Cloudflare (help@dogparkgames.com account) → Observability → Analytics → Web analytics → www.dogparkgames.com.
+// Visitor analytics: Plausible (cookieless, no consent banner needed).
+// Account: help@dogparkgames.com at plausible.io, site "dogparkgames.com".
+// The script URL is site-specific: Plausible → Sites → dogparkgames.com → Settings → Site installation.
 // Leave empty to turn analytics off.
-export const cloudflareToken = '1efd67d0bb6645fbacc928d662540de4';
+export const plausibleScript = 'https://plausible.io/js/pa-5W1n6tjH5q0UrrMhTAtkK.js';
