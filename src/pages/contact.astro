@@ -66,7 +66,7 @@ import dogHouse from '../assets/dog-house.webp';
             <label class="label" for="c-msg">Message <span class="text-token-red">*</span></label>
             <textarea class="field min-h-36 resize-y" id="c-msg" name="message" required></textarea>
           </div>
-          <p data-error class="hidden text-sm font-semibold text-token-red sm:col-span-2">Please add your email and a message.</p>
+          <p data-error role="alert" class="hidden text-sm font-semibold text-token-red sm:col-span-2">Please add your email and a message.</p>
           <button class="btn btn-dark sm:col-span-2" type="submit">Send message <Icon name="arrow" class="size-5" /></button>
         </div>
         <div data-success class="hidden py-10 text-center">
@@ -80,28 +80,42 @@ import dogHouse from '../assets/dog-house.webp';
 </Layout>
 
 <script>
-  import { identify, track } from '../lib/klaviyo';
+  import { sendEvent } from '../lib/klaviyo';
   import { goal } from '../lib/analytics';
 
   const form = document.getElementById('contact-form') as HTMLFormElement;
-  form.addEventListener('submit', (e) => {
+  const err = form.querySelector<HTMLElement>('[data-error]')!;
+  const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = form.querySelector<HTMLInputElement>('#c-email')!;
     const msg = form.querySelector<HTMLTextAreaElement>('#c-msg')!;
-    const ok = email.value && email.checkValidity() && msg.value.trim();
-    form.querySelector('[data-error]')!.classList.toggle('hidden', !!ok);
-    if (!ok) return;
-    // Record the message in Klaviyo (no marketing consent is given by contacting us)
-    identify({
-      email: email.value.trim(),
-      firstName: form.querySelector<HTMLInputElement>('#c-first')!.value.trim(),
-      lastName: form.querySelector<HTMLInputElement>('#c-last')!.value.trim(),
-    });
-    track('Submitted Contact Form', {
-      Topic: form.querySelector<HTMLSelectElement>('#c-topic')!.value,
-      Message: msg.value.trim().slice(0, 2000),
-    });
-    goal('Sent contact message', { topic: form.querySelector<HTMLSelectElement>('#c-topic')!.value });
+    const valid = email.value && email.checkValidity() && msg.value.trim();
+    err.textContent = 'Please add your email and a message.';
+    err.classList.toggle('hidden', !!valid);
+    if (!valid) return;
+    // Send the message to Klaviyo, which emails it to help@dogparkgames.com
+    // (flow "Contact form – Message alert"). Contacting us gives no marketing consent.
+    const topic = form.querySelector<HTMLSelectElement>('#c-topic')!.value;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    const ok = await sendEvent(
+      'Submitted Contact Form',
+      {
+        email: email.value.trim(),
+        firstName: form.querySelector<HTMLInputElement>('#c-first')!.value.trim(),
+        lastName: form.querySelector<HTMLInputElement>('#c-last')!.value.trim(),
+      },
+      { Topic: topic, Message: msg.value.trim().slice(0, 2000), Page: location.pathname },
+    );
+    button.disabled = false;
+    button.removeAttribute('aria-busy');
+    if (!ok) {
+      err.textContent = 'We couldn’t send your message just now. Please try again in a minute, or email help@dogparkgames.com.';
+      err.classList.remove('hidden');
+      return;
+    }
+    goal('Sent contact message', { topic });
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });
