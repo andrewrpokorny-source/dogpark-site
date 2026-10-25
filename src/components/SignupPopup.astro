@@ -69,6 +69,7 @@ import parkSign from '../assets/dog-park-sign.webp';
 
 <script>
   import { subscribe, track, KLAVIYO_LISTS } from '../lib/klaviyo';
+  import { goal } from '../lib/analytics';
   import { popupState, markJoined, markDismissed, SKIP_PATHS } from '../lib/signup-popup';
 
   const dialog = document.getElementById('signup-popup') as HTMLDialogElement;
@@ -150,6 +151,7 @@ import parkSign from '../assets/dog-park-sign.webp';
       return;
     }
     joined = true;
+    goal('Joined mailing list', { source: 'Pop-up', merch: merch ? 'Yes' : 'No' });
     markJoined();
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');

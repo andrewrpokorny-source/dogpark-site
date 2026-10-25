@@ -167,6 +167,7 @@ const reasons = [
 
 <script>
   import { sendEvent, subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+  import { goal } from '../lib/analytics';
 
   const form = document.getElementById('stockist-form') as HTMLFormElement;
   const err = form.querySelector<HTMLElement>('[data-error]')!;
@@ -217,6 +218,7 @@ const reasons = [
     button.removeAttribute('aria-busy');
 
     if (!ok) return fail('We couldn’t send your details just now. Please try again in a minute, or email help@dogparkgames.com.');
+    goal('Sent wholesale inquiry', { business: String(person.title || 'Not given') });
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });

@@ -169,6 +169,7 @@ const tokenRows = [
   import { initGame } from '../scripts/game';
   import { subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
   import { popupState, markJoined } from '../lib/signup-popup';
+  import { goal } from '../lib/analytics';
 
   const root = document.querySelector<HTMLElement>('[data-game]');
   if (root) initGame(root);
@@ -186,6 +187,7 @@ const tokenRows = [
 
     root.addEventListener('game:finish', (e) => {
       last = (e as CustomEvent<{ won: boolean; turns: number }>).detail;
+      goal('Finished sample game', { result: last.won ? 'TOP DOG' : 'Reached center' });
       if (popupState() === 'joined') showJoined();
       card.hidden = false;
       // Bring it into view on phones, where the panel sits below the board
@@ -219,6 +221,7 @@ const tokenRows = [
         err.classList.remove('hidden');
         return;
       }
+      goal('Joined mailing list', { source: 'Sample game' });
       markJoined();
       showJoined();
     });

@@ -84,6 +84,7 @@ const optionImages = await Promise.all(
 <script>
   import { addToCart, readCart, toast } from '../lib/cart';
   import { track } from '../lib/klaviyo';
+  import { goal } from '../lib/analytics';
 
   document.querySelectorAll<HTMLElement>('[data-product]').forEach((card) => {
     const slides = card.querySelectorAll<HTMLElement>('[data-slide]');
@@ -164,6 +165,7 @@ const optionImages = await Promise.all(
   document.querySelectorAll<HTMLElement>('[data-product]').forEach((c) => seen.observe(c));
 
   function trackAddedToCart(card: HTMLElement, option: string) {
+    goal('Added to cart', { product: card.dataset.name || '' });
     const items = readCart();
     const value = items.reduce((n, i) => n + i.price * i.qty, 0);
     track('Added to Cart', {

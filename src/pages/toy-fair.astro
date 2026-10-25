@@ -127,6 +127,7 @@ const chevron = '<svg class="pointer-events-none absolute right-4 top-1/2 size-5
 
 <script>
   import { sendEvent, subscribe, KLAVIYO_LISTS } from '../lib/klaviyo';
+  import { goal } from '../lib/analytics';
 
   const form = document.getElementById('meeting-form') as HTMLFormElement;
   const err = form.querySelector<HTMLElement>('[data-error]')!;
@@ -184,6 +185,7 @@ const chevron = '<svg class="pointer-events-none absolute right-4 top-1/2 size-5
     button.removeAttribute('aria-busy');
 
     if (!ok) return fail('We couldn’t send your request just now. Please try again in a minute, or email help@dogparkgames.com.');
+    goal('Requested Toy Fair meeting', { role: String(person.title || 'Not given') });
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });

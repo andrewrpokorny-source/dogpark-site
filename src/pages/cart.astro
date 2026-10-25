@@ -35,6 +35,7 @@ import Token from '../components/Token.astro';
 <script>
   import { readCart, writeCart, toast } from '../lib/cart';
   import { track } from '../lib/klaviyo';
+  import { goal } from '../lib/analytics';
 
   const list = document.getElementById('cart-items')!;
   const fmt = (n: number) => `$${n.toFixed(2)}`;
@@ -97,6 +98,7 @@ import Token from '../components/Token.astro';
         CheckoutURL: abs('/cart'),
       });
     }
+    if (readCart().length) goal('Started checkout');
     toast('Checkout opens with pre-orders in mid-November!');
   });
   render();

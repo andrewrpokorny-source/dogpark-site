@@ -81,6 +81,7 @@ import dogHouse from '../assets/dog-house.webp';
 
 <script>
   import { identify, track } from '../lib/klaviyo';
+  import { goal } from '../lib/analytics';
 
   const form = document.getElementById('contact-form') as HTMLFormElement;
   form.addEventListener('submit', (e) => {
@@ -100,6 +101,7 @@ import dogHouse from '../assets/dog-house.webp';
       Topic: form.querySelector<HTMLSelectElement>('#c-topic')!.value,
       Message: msg.value.trim().slice(0, 2000),
     });
+    goal('Sent contact message', { topic: form.querySelector<HTMLSelectElement>('#c-topic')!.value });
     form.querySelector('[data-form-body]')!.classList.add('hidden');
     form.querySelector('[data-success]')!.classList.remove('hidden');
   });
