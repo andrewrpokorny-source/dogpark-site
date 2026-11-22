@@ -20,7 +20,7 @@ const {
   jsonLd,
   description = 'Dog Park: A Get Lost! Game. Move your dog through the labyrinth collecting bones, diamonds and hearts. A family-friendly board game for all ages.',
 } = Astro.props;
-const fullTitle = title ? `${title} · Dog Park` : 'Dog Park · A Get Lost! Game';
+const fullTitle = title ? `${title} · Dog Park` : 'Dog Park: A Get Lost! Game · Family-Friendly Board Game';
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.jpg', Astro.site);
 ---
