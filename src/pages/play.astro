@@ -6,6 +6,7 @@ import board from '../assets/game-board.webp';
 import { pups, pupName } from '../data/pups';
 
 import Token from '../components/Token.astro';
+import MeetThePups from '../components/MeetThePups.astro';
 import boneArt from '../assets/tokens/bone.webp';
 import diamondArt from '../assets/tokens/diamond.webp';
 import heartArt from '../assets/tokens/heart.webp';
@@ -30,7 +31,7 @@ const tokenRows = [
     </div>
   </section>
 
-  <section class="mx-auto grid max-w-7xl gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:px-8" data-game data-art-bone={artBone} data-art-diamond={artDiamond} data-art-heart={artHeart}>
+  <section class="mx-auto grid max-w-7xl scroll-mt-24 gap-6 px-4 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:px-8" data-game data-art-bone={artBone} data-art-diamond={artDiamond} data-art-heart={artHeart}>
     <!-- Board -->
     <div class="lg:sticky lg:top-24 lg:self-start">
       <div class="relative overflow-hidden rounded-[1.75rem] border-4 border-ink bg-ink shadow-2xl">
@@ -158,6 +159,9 @@ const tokenRows = [
       </p>
     </div>
   </section>
+
+  <!-- MEET THE PUPS: picking one switches the token in the game above -->
+  <MeetThePups onPlayPage />
   </div>
 </Layout>
 
@@ -226,4 +230,16 @@ const tokenRows = [
       showJoined();
     });
   }
+
+  // Pup bios below the game: choose that pup and scroll back up to the board.
+  document.querySelectorAll<HTMLAnchorElement>('[data-choose-pup]').forEach((a) =>
+    a.addEventListener('click', (e) => {
+      const btn = document.querySelector<HTMLButtonElement>(`[data-game] [data-pup="${a.dataset.choosePup}"]`);
+      if (!btn) return;
+      e.preventDefault();
+      btn.click();
+      const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelector('[data-game]')?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+    }),
+  );
 </script>
